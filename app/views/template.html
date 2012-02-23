@@ -1,0 +1,41 @@
+#{extends 'main.html' /}
+
+#{set 'moreScripts'}
+    #{get 'moreScripts'/}
+    <script src="@{'/public/javascripts/bootstrap.js'}" type="text/javascript" charset="utf-8"></script>
+#{/set}
+
+#{set connectedUser:controllers.Security.connectedUser()/}
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="@{Application.index}">Accueil</a>
+            <ul class="nav">
+                <li class="dropdown #{if request.action =~ "Application"}active#{/if}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Torrents<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li #{if request.action =~ "Application.index"}class="active"#{/if}><a href="@{Application.index}"><i class="icon-file"></i>&nbsp;Tous</a></li>
+                        <li #{if request.action =~ "Application.create"}class="active"#{/if}><a href="@{Application.create}"><i class="icon-file"></i>&nbsp;Nouveau</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown #{if request.action =~ "Users"}active#{/if}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Utilisateurs<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li #{if request.action =~ "Users.index"}class="active"#{/if}><a href="@{Users.index}"><i class="icon-user"></i>&nbsp;Tous</a></li>
+                        <li #{if request.action =~ "Users.create"}class="active"#{/if}><a href="@{Users.create}"><i class="icon-user"></i>&nbsp;Nouveau</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav pull-right">
+                <li><span>${connectedUser?.username}</span></li>
+                <li class="divider-vertical"></li>
+                <li><a href="@{Secure.logout()}" title="D&eacute;connexion">D&eacute;connexion</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    #{doLayout /}
+</div>

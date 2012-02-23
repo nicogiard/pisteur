@@ -1,0 +1,62 @@
+#{extends 'template.html' /}
+#{set title: (user?.id != null) ? ("Modification de l''utilisateur " + user.firstName + " " + user.lastName) :  "Nouvel utilisateur"/}
+
+<h1 class="screen-title"><i class="big-icon-user"></i>&nbsp;Utilisateurs</h1>
+<h2 class="screen-title">
+    #{if user?.id!=null}
+        Modification de l'utilisateur ${user.firstName} ${user.lastName}
+    #{/if}
+    #{else}
+        Nouvel utilisateur
+    #{/else}
+</h2>
+
+#{alerts /}
+<form action="@{Users.save()}" method="POST" class="form-horizontal">
+    <input type="hidden" name="user.id" value="${user?.id}">
+    <div class="control-group #{ifError 'user.username'}error#{/ifError}">
+        <label class="control-label">Identifiant</label>
+        <div class="controls">
+            <input type="text" autocomplete="off" #{if user?.id != null}readonly="readonly"#{/if} name="user.username" value="${flash.get('user.username') != null ? flash.get('user.username') : (user?.id != null) ? user?.username : null}">
+        #{ifError 'user.username'}<span class="help-inline">#{error 'user.username' /}</span>#{/ifError}
+        #{else }<span class="help-inline">&{'validation.required'}</span>#{/else}
+        </div>
+    </div>
+    <div class="control-group #{ifError 'user.firstName'}error#{/ifError}">
+        <label class="control-label">Pr&eacute;nom</label>
+        <div class="controls">
+            <input type="text" name="user.firstName" value="${flash.get('user.firstName') != null ? flash.get('user.firstName') : user?.firstName}">
+            #{ifError 'user.firstName'}<span class="help-inline">#{error 'user.firstName' /}</span>#{/ifError}
+            #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
+        </div>
+    </div>
+    <div class="control-group #{ifError 'user.lastName'}error#{/ifError}">
+        <label class="control-label">Nom</label>
+        <div class="controls">
+            <input type="text" autocomplete="off" name="user.lastName" value="${flash.get('user.lastName') != null ? flash.get('user.lastName') : user?.lastName}">
+            #{ifError 'user.lastName'}<span class="help-inline">#{error 'user.lastName' /}</span>#{/ifError}
+            #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
+        </div>
+    </div>
+    <div class="control-group #{ifError 'user.email'}error#{/ifError}">
+        <label class="control-label">Email</label>
+        <div class="controls">
+            <input type="text" name="user.email" value="${flash.get('user.email') != null ? flash.get('user.email') : user?.email}">
+            #{ifError 'user.email'}<span class="help-inline">#{error 'user.email' /}</span>#{/ifError}
+            #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
+        </div>
+    </div>
+    <div class="control-group #{ifError 'user.ipAddress'}error#{/ifError}">
+        <label class="control-label">Adresse IP</label>
+        <div class="controls">
+            <input type="text" name="user.ipAddress" value="${flash.get('user.ipAddress') != null ? flash.get('user.ipAddress') : user?.ipAddress}">
+        #{ifError 'user.ipAddress'}<span class="help-inline">#{error 'user.ipAddress' /}</span>#{/ifError}
+        #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
+        </div>
+    </div>
+    <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i>&nbsp;Enregistrer</button>
+    <a href="@{Users.index}" class="btn"><i class="icon-ban-circle"></i>&nbsp;Annuler</a>
+    </div>
+</form>
+

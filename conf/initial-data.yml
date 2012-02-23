@@ -1,0 +1,74 @@
+#--------------
+# Users
+#--------------
+User(nicogiard):
+  username: nicogiard
+  password: d659c10e27d52b00987b65e85d99bce5480adcae
+  email: n@g.com
+  firstName: Nicolas
+  lastName: Giard
+
+User(miumius):
+  username: miumius
+  password: d659c10e27d52b00987b65e85d99bce5480adcae
+  email: c.l@g.com
+  firstName: Cédric
+  lastName: Lemius
+
+User(greg):
+  username: greg
+  password: d659c10e27d52b00987b65e85d99bce5480adcae
+  email: g.l@gg.com
+  firstName: Grégory
+  lastName: Le Garec
+
+#--------------
+# Tag
+#--------------
+Tag(tagFilm):
+  name: Film
+
+Tag(tagSerie):
+  name: Série
+
+Tag(tagScienceFiction):
+  name: Science Fiction
+
+Tag(tagMedieval):
+  name: Médiéval
+
+Tag(tagJeuxVideo):
+  name: Jeux Vidéo
+
+Tag(tagPS3):
+  name: PS3
+
+Tag(tagXBox360):
+  name: XBox360
+
+Tag(tagPC):
+  name: PC
+
+#--------------
+# Torrent
+#--------------
+Torrent(file1):
+  filename: film1
+  tags:
+    - tagFilm
+    - tagScienceFiction
+  uploader: nicogiard
+
+Torrent(file2):
+  filename: film2
+  tags:
+    - tagSerie
+    - tagScienceFiction
+  uploader: nicogiard
+
+Torrent(file3):
+  filename: film3
+  tags:
+    - tagSerie
+    - tagMedieval
+  uploader: miumius

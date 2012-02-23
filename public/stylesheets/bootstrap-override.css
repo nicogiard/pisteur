@@ -1,0 +1,22 @@
+body {
+    padding-top: 60px;
+}
+.container {
+    width: auto;
+    padding: 0 30px;
+}
+.navbar .nav > li > span{
+    float: none;
+    padding: 10px 10px 11px;
+    line-height: 19px;
+    color: #999;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    display: block;
+}
+[class^="icon-"], [class*=" icon-"] {
+    background-image: url("../images/glyphicons-halflings.png");
+}
+.icon-white{background-image:url("../images/glyphicons-halflings-white.png");}
+li.active > a i[class^="icon-"] {
+    background-image: url(../images/glyphicons-halflings-white.png);
+}

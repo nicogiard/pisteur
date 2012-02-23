@@ -1,0 +1,40 @@
+#{extends 'Secure/layout.html' /}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="@{Application.index}" title="Accueil">Accueil</a>
+        </div>
+    </div>
+</div>
+<div style="width:600px; margin:auto;">
+    <h1 class="screen-title" style="margin-bottom:30px;"><i class="big-icon-user"></i>&nbsp;&{'secure.title'}</h1>
+
+    #{alerts/}
+
+    <form action="@{authenticate}" method="POST" class="form-horizontal">
+
+        <div class="control-group">
+            <label class="control-label" for="username">&{'secure.username'}</label>
+            <div class="controls">
+                <input type="text" name="username" id="username" value="${flash.username}">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="password">&{'secure.password'}</label>
+            <div class="controls">
+                <input type="password" name="password" id="password" value="${flash.password}">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="remember">&{'secure.remember'}</label>
+            <div class="controls">
+                <input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''}>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <input type="submit" class="btn btn-primary" value="&{'secure.signin'}" />
+        </div>
+
+    </form>
+</div>

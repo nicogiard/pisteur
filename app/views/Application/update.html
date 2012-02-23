@@ -1,0 +1,53 @@
+#{extends 'template.html' /}
+#{set title: (user?.id != null) ? ("Modification du torrent " + torrent.filename) :  "Nouveau Torrent"/}
+
+
+<h1 class="screen-title"><i class="big-icon-page"></i>&nbsp;Torrents</h1>
+<h2 class="screen-title">
+#{if torrent?.id!=null}
+    Modification du torrent ${torrent.filename}
+#{/if}
+#{else}
+    Nouveau Torrent
+#{/else}
+</h2>
+
+#{alerts /}
+
+<form action="@{Application.save()}" method="POST" class="form-horizontal">
+    <input type="hidden" name="user.id" value="${torrent?.id}">
+    <div class="control-group #{ifError 'torrent.filename'}error#{/ifError}">
+        <label class="control-label">Nom du Torrent</label>
+        <div class="controls">
+            <input type="text" autocomplete="off" name="torrent.filename" value="${flash.get('torrent.filename') != null ? flash.get('torrent.filename') : (torrent?.id != null) ? torrent?.filename : null}">
+        #{ifError 'torrent.filename'}<span class="help-inline">#{error 'torrent.filename' /}</span>#{/ifError}
+        #{else }<span class="help-inline">&{'validation.required'}</span>#{/else}
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Fichier Torrent</label>&nbsp;
+        <input type="file" name="torrent.file">&nbsp;
+    </div>
+
+    <div class="control-group #{ifError 'torrent.description'}error#{/ifError}">
+        <label class="control-label">Description</label>
+        <div class="controls">
+            <textarea rows="6" cols="" name="torrent.description">${flash.get('torrent.description') != null ? flash.get('torrent.description') : torrent?.description}</textarea>
+        #{ifError 'torrent.description'}<span class="help-inline">#{error 'torrent.description' /}</span>#{/ifError}
+        </div>
+    </div>
+
+    <div class="control-group #{ifError 'tags'}error#{/ifError}">
+        <label class="control-label">Tags</label>
+        <div class="controls">
+            <input type="text" autocomplete="off" name="tags" value="${flash.get('tags') != null ? flash.get('tags') : (torrent?.id != null) ? torrent?.tags : null}">
+        #{ifError 'tags'}<span class="help-inline">#{error 'tags' /}</span>#{/ifError}
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i>&nbsp;Enregistrer</button>
+        <a href="@{Application.index}" class="btn"><i class="icon-ban-circle"></i>&nbsp;Annuler</a>
+    </div>
+</form>
