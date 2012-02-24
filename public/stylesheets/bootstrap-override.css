@@ -16,7 +16,16 @@ body {
 [class^="icon-"], [class*=" icon-"] {
     background-image: url("../images/glyphicons-halflings.png");
 }
-.icon-white{background-image:url("../images/glyphicons-halflings-white.png");}
+.icon-white {
+    background-image:url("../images/glyphicons-halflings-white.png");
+}
 li.active > a i[class^="icon-"] {
     background-image: url(../images/glyphicons-halflings-white.png);
+}
+.error-inline {
+    display: inline-block;
+    margin-bottom: 0px;
+    vertical-align: middle;
+    padding-left: 5px;
+    color: red;
 }

@@ -1,16 +1,25 @@
 package controllers;
 
+import com.google.common.collect.Lists;
 import controllers.utils.Pager;
 import models.Tag;
 import models.Torrent;
+import models.User;
+import org.apache.commons.lang.StringUtils;
+import play.Logger;
+import play.data.validation.Error;
 import play.data.validation.Required;
 import play.data.validation.Valid;
+import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @With(Secure.class)
 public class Application extends Controller {
@@ -57,8 +66,15 @@ public class Application extends Controller {
         render(torrent);
     }
 
-    public static void save(@Required @Valid Torrent torrent) {
+    public static void save(@Required @Valid Torrent torrent, File file, String tags) {
+        if(torrent.id == null){
+            validation.required(file);
+        }
+        validation.valid(file);
         if (validation.hasErrors()) {
+            for (Map.Entry<String, List<Error>> stringListEntry : validation.errorsMap().entrySet()) {
+                Logger.debug("%s : %s", stringListEntry.getKey(), stringListEntry.getValue());
+            }
             flash.error("Veuillez corriger les erreurs");
             params.flash();
             validation.keep();
@@ -71,11 +87,43 @@ public class Application extends Controller {
         if (torrent.id == null) {
             torrent.uploader = Security.connectedUser();
             torrent.creationDate = new Date();
+            try {
+                torrent.setFile(file);
+            } catch (FileNotFoundException e) {
+                Logger.error(e.getMessage());
+            }
         } else {
             torrent.modificationDate = new Date();
         }
-        // torrent.save();
-
+        torrent.tags = extractTags(tags);
+        torrent.save();
         index();
+    }
+
+
+
+    public static void delete(Long id) {
+        Torrent torrent = Torrent.findById(id);
+        notFoundIfNull(torrent);
+        torrent.delete();
+        flash.success("Le torrent a été supprimé avec succès");
+        index();
+    }
+
+    private static List<Tag> extractTags(String tags) {
+        List<Tag> listTags = Lists.newArrayList();
+        if (StringUtils.isNotBlank(tags)) {
+            String[] tabTags = tags.split(",");
+            for (String stringTag : tabTags) {
+                Tag tag = Tag.find("name=?", stringTag.trim()).first();
+                if (tag == null) {
+                    tag = new Tag();
+                    tag.name = stringTag.trim();
+                    tag.save();
+                }
+                listTags.add(tag);
+            }
+        }
+        return listTags;
     }
 }

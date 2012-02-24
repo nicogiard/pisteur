@@ -29,11 +29,9 @@ public class Torrent extends Model {
     @Column(columnDefinition = "TEXT")
     public String description;
 
-    @Required
     @ManyToMany
     public List<Tag> tags;
 
-    @Required
     @OneToOne
     public User uploader;
 
@@ -47,7 +45,7 @@ public class Torrent extends Model {
         return file;
     }
 
-    public void setFile(File file) throws IOException, SQLException {
+    public void setFile(File file) throws FileNotFoundException {
         this.file = getBlob(file);
     }
 

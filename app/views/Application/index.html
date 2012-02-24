@@ -12,21 +12,27 @@
     </ul>
 </div>
 
+#{alerts /}
+
 #{if torrents?.size() > 0}
     <table id="resultTable" class="table table-striped table-bordered table-condensed clear-pull">
         <tr>
-            <th>Torrent</th>
+            <th style="width: 30%;">Torrent</th>
             <th>Uploader</th>
             <th>Tags</th>
-            <th>Actions</th>
+            <th style="width: 220px;">Actions</th>
         </tr>
     #{list torrents, as:'torrent'}
         <tr>
-            <td><a href="#!">${torrent.filename}</a></td>
+            <td><a href="#!" title="Télécharger le torrent ${torrent.filename}"><i class="icon-download"></i> ${torrent.filename}</a></td>
             <td>${torrent.uploader?.username}</td>
-            <td>#{list torrent.tags, as:'tag'}<a href="@{Application.tag(tag.name)}" class="tag">${tag.name}</a>&nbsp;#{/list}</td>
+            <td>
+                #{list torrent.tags, as:'tag'}
+                    <a href="@{Application.tag(tag.name)}" class="tag"><i class="icon-tag"></i> ${tag.name}</a>${tag_isLast ? '' : ',' }
+                #{/list}</td>
             <td class="actions">
                 <a href="@{Application.update(torrent.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>&nbsp;Modifier</a>
+                <a href="@{Application.delete(torrent.id)}" class="btn btn-danger" onclick="if(!confirm('Etes vous sûr de vouloir supprimer ce torrent ?'))return false;" title="Supprimer"><i class="icon-trash icon-white"></i>&nbsp;Supprimer</a>
             </td>
         </tr>
     #{/list}
