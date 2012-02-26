@@ -4,13 +4,11 @@ import com.google.common.collect.Lists;
 import controllers.utils.Pager;
 import models.Tag;
 import models.Torrent;
-import models.User;
 import org.apache.commons.lang.StringUtils;
 import play.Logger;
 import play.data.validation.Error;
 import play.data.validation.Required;
 import play.data.validation.Valid;
-import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -67,7 +65,7 @@ public class Application extends Controller {
     }
 
     public static void save(@Required @Valid Torrent torrent, File file, String tags) {
-        if(torrent.id == null){
+        if (torrent.id == null) {
             validation.required(file);
         }
         validation.valid(file);
@@ -101,13 +99,20 @@ public class Application extends Controller {
     }
 
 
-
     public static void delete(Long id) {
         Torrent torrent = Torrent.findById(id);
         notFoundIfNull(torrent);
         torrent.delete();
         flash.success("Le torrent a été supprimé avec succès");
         index();
+    }
+
+    public static void getTorrentFile(Long torrentId) {
+        Torrent torrent = Torrent.findById(torrentId);
+        notFoundIfNull(torrent);
+        notFoundIfNull(torrent.getFile());
+        File file = torrent.getFile();
+        renderBinary(file, torrent.filename);
     }
 
     private static List<Tag> extractTags(String tags) {

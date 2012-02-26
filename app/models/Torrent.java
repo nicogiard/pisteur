@@ -8,11 +8,11 @@ import play.data.validation.Required;
 import play.db.jpa.JPA;
 import play.db.jpa.Model;
 
-import javax.persistence.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import java.io.*;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Date;
@@ -41,8 +41,30 @@ public class Torrent extends Model {
     @As(lang = {"*"}, value = {"dd/MM/yyyy HH:mm:ss"})
     public Date modificationDate;
 
-    public Blob getFile() {
-        return file;
+    public File getFile() {
+        if (file != null) {
+            File tempFile = new File("tempFile");
+            InputStream is = null;
+            try {
+                is = file.getBinaryStream();
+                OutputStream os = new FileOutputStream(tempFile);
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = is.read(buffer)) != -1) {
+                    os.write(buffer, 0, bytesRead);
+                }
+                is.close();
+                os.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return tempFile;
+        }
+        return null;
     }
 
     public void setFile(File file) throws FileNotFoundException {

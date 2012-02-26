@@ -3,6 +3,8 @@
 
 <h1 class="screen-title"><i class="big-icon-page"></i>&nbsp;Torrents</h1>
 
+<a href="@{admin.Users.create()}" class="btn btn-primary pull-right" style="margin:18px 0;"><i class="icon-plus icon-white" title="&{'cockpit.action.addUser'}"></i>&nbsp;&{'cockpit.action.addUser'}</a>
+
 <div class="subnav">
     <ul class="nav nav-pills">
         <li #{if !activeTag}class="active"#{/if}><a href="@{Application.index}">Tous</a></li>
@@ -24,7 +26,7 @@
         </tr>
     #{list torrents, as:'torrent'}
         <tr>
-            <td><a href="#!" title="Télécharger le torrent ${torrent.filename}"><i class="icon-download"></i> ${torrent.filename}</a></td>
+            <td><a href="@{Application.getTorrentFile(torrent.id)}" title="Télécharger le torrent ${torrent.filename}"><i class="icon-download"></i> ${torrent.filename}</a></td>
             <td>${torrent.uploader?.username}</td>
             <td>
                 #{list torrent.tags, as:'tag'}
