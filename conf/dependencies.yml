@@ -3,4 +3,5 @@
 require:
     - play
     - secure
+    - play -> search 2.0
     - com.google.guava -> guava 11.0.1

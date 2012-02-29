@@ -3,7 +3,7 @@
 
 <h1 class="screen-title"><i class="big-icon-page"></i>&nbsp;Torrents</h1>
 
-<a href="@{admin.Users.create()}" class="btn btn-primary pull-right" style="margin:18px 0;"><i class="icon-plus icon-white" title="&{'cockpit.action.addUser'}"></i>&nbsp;&{'cockpit.action.addUser'}</a>
+<a href="@{Users.create()}" class="btn btn-primary pull-right" style="margin:18px 0;"><i class="icon-plus icon-white" title="&{'cockpit.action.addUser'}"></i>&nbsp;&{'cockpit.action.addUser'}</a>
 
 <div class="subnav">
     <ul class="nav nav-pills">
@@ -12,6 +12,9 @@
         <li #{if activeTag && activeTag.name == tag.name}class="active"#{/if}><a href="@{Application.tag(tag.name)}">${tag.name}</a></li>
     #{/list}
     </ul>
+    <form class="navbar-search pull-left">
+        <input type="text" class="search-query" placeholder="Search">
+    </form>
 </div>
 
 #{alerts /}

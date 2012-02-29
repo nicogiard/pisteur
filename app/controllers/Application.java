@@ -53,7 +53,14 @@ public class Application extends Controller {
         Pager pager = TORRENTS_PAGER;
         renderTemplate("Application/index.html", pager, torrents, activeTag);
     }
-
+    
+    public static void search(String keywords){
+    	TORRENTS_PAGER.setElementCount(Torrent.countSearch(keywords));    	
+        List<Torrent> torrents = Torrent.search(keywords, TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());        
+        Pager pager = TORRENTS_PAGER;
+        renderTemplate("Application/index.html", pager, torrents);
+    }
+    
     public static void create() {
         renderTemplate("Application/update.html");
     }

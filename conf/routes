@@ -8,6 +8,7 @@
 # Home page
 GET     /                                       Application.index
 GET     /tag/{tagName}                          Application.tag
+GET     /search/{keywords}                      Application.search
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
