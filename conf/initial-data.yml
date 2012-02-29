@@ -10,7 +10,7 @@ User(nicogiard):
 
 User(miumius):
   username: miumius
-  password: d659c10e27d52b00987b65e85d99bce5480adcae
+  password: 4ab13d05b97544ec9e1c26bc58e3794d958456c8
   email: c.l@g.com
   firstName: Cédric
   lastName: Lemius
@@ -49,11 +49,14 @@ Tag(tagXBox360):
 Tag(tagPC):
   name: PC
 
+Tag(tagAnimation):
+  name: Animation
+
 #--------------
 # Torrent
 #--------------
 Torrent(file1):
-  filename: film1
+  filename: film1  
   tags:
     - tagFilm
     - tagScienceFiction
@@ -71,4 +74,18 @@ Torrent(file3):
   tags:
     - tagSerie
     - tagMedieval
+  uploader: miumius
+
+Torrent(totoro):
+  filename: totoro
+  descritpion: totoro de miyazaki
+  tags:
+    - tagAnimation
+  uploader: miumius
+
+Torrent(chihiro):
+  filename: le_voyage_de_chihiro
+  descritpion: le voyage de chihiro de miyazaki
+  tags:
+    - tagAnimation
   uploader: miumius
