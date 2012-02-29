@@ -3,8 +3,6 @@
 
 <h1 class="screen-title"><i class="big-icon-page"></i>&nbsp;Torrents</h1>
 
-<a href="@{Users.create()}" class="btn btn-primary pull-right" style="margin:18px 0;"><i class="icon-plus icon-white" title="&{'cockpit.action.addUser'}"></i>&nbsp;&{'cockpit.action.addUser'}</a>
-
 <div class="subnav">
     <ul class="nav nav-pills">
         <li #{if !activeTag}class="active"#{/if}><a href="@{Application.index}">Tous</a></li>
@@ -12,9 +10,14 @@
         <li #{if activeTag && activeTag.name == tag.name}class="active"#{/if}><a href="@{Application.tag(tag.name)}">${tag.name}</a></li>
     #{/list}
     </ul>
-    <form class="navbar-search pull-left">
-        <input type="text" class="search-query" placeholder="Search">
-    </form>
+</div>
+
+<div class="container">
+#{form @Application.search(), class:"form-search pull-left", style:"margin: 18px 0;"}
+    <input type="text" name="keywords" class="search-query" placeholder="Recherche" value="${keywords}">
+    <button type="submit" class="btn">Rechercher</button>
+#{/form}
+<a href="@{Application.create()}" class="btn btn-primary pull-right" style="margin:18px 0;"><i class="icon-plus icon-white" title="Ajouter un Torrent"></i>&nbsp;Ajouter un Torrent</a>
 </div>
 
 #{alerts /}
