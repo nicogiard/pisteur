@@ -1,8 +1,8 @@
 #{extends 'main.html' /}
 
 #{set 'moreScripts'}
-    #{get 'moreScripts'/}
     <script src="@{'/public/javascripts/bootstrap.js'}" type="text/javascript" charset="utf-8"></script>
+    #{get 'moreScripts'/}
 #{/set}
 
 #{set connectedUser:controllers.Security.connectedUser()/}

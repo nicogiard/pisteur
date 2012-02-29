@@ -1,6 +1,22 @@
 #{extends 'template.html' /}
 #{set title:'Torrents' /}
 
+#{set 'moreScripts'}
+<script type="text/javascript">
+$('#detailsModal').modal('hide');
+
+$('.btn-detail').live("click", function(e) {
+    var detailsAction = #{jsAction @Application.details(':id') /}
+    $('#detailsModal').load(
+        detailsAction({id: $(this).attr("data-id")}),
+        function() {
+            $('#detailsModal').modal('show');
+        }
+    )
+});
+</script>
+#{/set}
+
 <h1 class="screen-title"><i class="big-icon-page"></i>&nbsp;Torrents</h1>
 
 <div class="subnav">
@@ -17,9 +33,10 @@
     <input type="text" name="keywords" class="search-query" placeholder="Recherche" value="${keywords}">
     <button type="submit" class="btn">Rechercher</button>
 #{/form}
-<a href="@{Application.create()}" class="btn btn-primary pull-right" style="margin:18px 0;"><i class="icon-plus icon-white" title="Ajouter un Torrent"></i>&nbsp;Ajouter un Torrent</a>
+<a href="@{Application.create()}" class="btn btn-primary pull-right" style="margin:18px 0;"><i class="icon-plus icon-white" title="Ajouter un Torrent"></i>Ajouter un Torrent</a>
 </div>
 
+<div class="container">
 #{alerts /}
 
 #{if torrents?.size() > 0}
@@ -32,15 +49,19 @@
         </tr>
     #{list torrents, as:'torrent'}
         <tr>
-            <td><a href="@{Application.getTorrentFile(torrent.id)}" title="Télécharger le torrent ${torrent.filename}"><i class="icon-download"></i> ${torrent.filename}</a></td>
+            <td>
+                <a href="#!" class="btn-detail" data-id="${torrent.id}">${torrent.filename}</a>
+                <a href="@{Application.getTorrentFile(torrent.id)}" class="pull-right" title="T&eacute;l&eacute;charger le torrent ${torrent.filename}"><i class="icon-download"></i>T&eacute;l&eacute;charger</a>
+            </td>
             <td>${torrent.uploader?.username}</td>
             <td>
                 #{list torrent.tags, as:'tag'}
-                    <a href="@{Application.tag(tag.name)}" class="tag"><i class="icon-tag"></i> ${tag.name}</a>${tag_isLast ? '' : ',' }
-                #{/list}</td>
+                    <a href="@{Application.tag(tag.name)}" class="tag"><i class="icon-tag"></i>${tag.name}</a>${tag_isLast ? '' : ',' }
+                #{/list}
+            </td>
             <td class="actions">
-                <a href="@{Application.update(torrent.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>&nbsp;Modifier</a>
-                <a href="@{Application.delete(torrent.id)}" class="btn btn-danger" onclick="if(!confirm('Etes vous sûr de vouloir supprimer ce torrent ?'))return false;" title="Supprimer"><i class="icon-trash icon-white"></i>&nbsp;Supprimer</a>
+                <a href="@{Application.update(torrent.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>Modifier</a>
+                <a href="@{Application.delete(torrent.id)}" class="btn btn-danger" onclick="if(!confirm('Etes vous sûr de vouloir supprimer ce torrent ?'))return false;" title="Supprimer"><i class="icon-trash icon-white"></i>Supprimer</a>
             </td>
         </tr>
     #{/list}
@@ -58,3 +79,6 @@
 #{else}
     <br/><div class="alert clear-pull">Aucun Torrent</div>
 #{/else}
+</div>
+
+<div class="modal" id="detailsModal"></div>

@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Détail du Torrent</h3>
+</div>
+<div class="modal-body">
+    <div class="control-group">
+        <label class="control-label">Nom du Torrent :</label>
+        <span>${torrent.filename}</span>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Description :</label>
+        <span>${!torrent.description ? "&nbsp;".raw() : torrent.description}</span>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Uploader :</label>
+        <span>${!torrent.uploader?.username ? "&nbsp;".raw() : torrent.uploader?.username}</span>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Tags :</label>
+        <span>
+            #{list torrent.tags, as:'tag'}
+                <a href="@{Application.tag(tag.name)}" class="tag"><i class="icon-tag"></i>${tag.name}</a>${tag_isLast ? '' : ',' }
+            #{/list}
+        </span>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Fermer</a>
+</div>

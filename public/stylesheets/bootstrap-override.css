@@ -1,6 +1,13 @@
 body {
     padding-top: 60px;
 }
+input, textarea, select, .uneditable-input {
+    width: 280px;
+}
+input[type="file"] {
+    margin-left: 12px;
+    width: 290px;
+}
 .container {
     width: auto;
     padding: 0 30px;
@@ -15,6 +22,7 @@ body {
 }
 [class^="icon-"], [class*=" icon-"] {
     background-image: url("../images/glyphicons-halflings.png");
+    margin-right: 3px;
 }
 .icon-white {
     background-image:url("../images/glyphicons-halflings-white.png");
@@ -28,4 +36,14 @@ li.active > a i[class^="icon-"] {
     vertical-align: middle;
     padding-left: 5px;
     color: red;
+}
+.modal {
+    display: none;
+}
+.modal label.control-label {
+    display: inline;
+    float: left;
+    margin-right: 5px;
+    text-align: right;
+    width: 105px;
 }

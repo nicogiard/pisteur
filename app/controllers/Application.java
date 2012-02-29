@@ -53,14 +53,14 @@ public class Application extends Controller {
         Pager pager = TORRENTS_PAGER;
         renderTemplate("Application/index.html", pager, torrents, activeTag);
     }
-    
-    public static void search(String keywords){
-    	TORRENTS_PAGER.setElementCount(Torrent.countSearch(keywords));    	
-        List<Torrent> torrents = Torrent.search(keywords, TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());        
+
+    public static void search(String keywords) {
+        TORRENTS_PAGER.setElementCount(Torrent.countSearch(keywords));
+        List<Torrent> torrents = Torrent.search(keywords, TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
         Pager pager = TORRENTS_PAGER;
         renderTemplate("Application/index.html", pager, keywords, torrents);
     }
-    
+
     public static void create() {
         renderTemplate("Application/update.html");
     }
@@ -112,6 +112,12 @@ public class Application extends Controller {
         torrent.delete();
         flash.success("Le torrent a été supprimé avec succès");
         index();
+    }
+
+    public static void details(Long id) {
+        Torrent torrent = Torrent.findById(id);
+        notFoundIfNull(torrent);
+        render(torrent);
     }
 
     public static void getTorrentFile(Long torrentId) {
