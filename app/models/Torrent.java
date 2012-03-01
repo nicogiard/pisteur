@@ -1,26 +1,10 @@
 package models;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.engine.jdbc.LobCreator;
-
 import play.data.binding.As;
 import play.data.validation.Required;
 import play.db.jpa.JPA;
@@ -30,8 +14,15 @@ import play.modules.search.Indexed;
 import play.modules.search.Query;
 import play.modules.search.Search;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import java.io.*;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 
 @Indexed
 @Entity
