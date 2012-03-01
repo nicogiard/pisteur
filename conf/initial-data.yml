@@ -3,10 +3,11 @@
 #--------------
 User(nicogiard):
   username: nicogiard
-  password: d659c10e27d52b00987b65e85d99bce5480adcae
+  password: nicogiard
   email: n@g.com
   firstName: Nicolas
   lastName: Giard
+  ipAddress: 127.0.0.1
   isActive: true
   isAdmin: true
 
@@ -16,15 +17,17 @@ User(miumius):
   email: c.l@g.com
   firstName: Cédric
   lastName: Lemius
+  ipAddress: 127.0.0.1
   isActive: true
   isAdmin: true
 
 User(greg):
   username: greg
-  password: d659c10e27d52b00987b65e85d99bce5480adcae
+  password: greg
   email: g.l@gg.com
   firstName: Grégory
   lastName: Le Garec
+  ipAddress: 127.0.0.1
   isActive: true
 
 #--------------
