@@ -8,7 +8,22 @@
 # Home page
 GET     /                                       Application.index
 GET     /tag/{tagName}                          Application.tag
-GET     /search/{keywords}                      Application.search
+POST    /search/{keywords}                      Application.search
+GET     /torrent/create                         Application.create
+GET     /torrent/{torrentId}/update             Application.update
+POST    /torrent/save                           Application.save
+GET     /torrent/{torrentId}/details            Application.details
+GET     /torrent/{torrentId}/delete             Application.delete
+
+# Users
+GET     /users                                  Users.index
+GET     /users/filter/{letter}                  Users.filter
+GET     /user/create                            Users.create
+GET     /user/{userId}/update                   Users.update
+POST    /user/save                              Users.save
+GET     /user/{userId}/activate                 Users.activate
+GET     /user/{userId}/delete                   Users.delete
+
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
