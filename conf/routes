@@ -24,6 +24,8 @@ POST    /user/save                              Users.save
 GET     /user/{userId}/activate                 Users.activate
 GET     /user/{userId}/delete                   Users.delete
 
+# Tracker
+GET     /announce                               Announce.index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
