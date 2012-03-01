@@ -32,6 +32,10 @@
             <th>Email</th>
             <th>Adresse IP</th>
             <th>Actions</th>
+            #{if currentUser.isAdmin}
+                <th>Actif</th>
+            #{/if}
+            
         </tr>
     #{list users, as:'user'}
         <tr>
@@ -43,6 +47,11 @@
             <td class="actions">
                 <a href="@{Users.update(user.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>&nbsp;Modifier</a>
             </td>
+            #{if currentUser.isAdmin}
+            <td>
+                <a href="@{Users.activate(user.id)}"><span class="label label-${user.isActive ? 'success' : 'important'}">${user.isActive ? 'Actif' : 'Non actif'}</span></a>
+            </td>
+            #{/if}
         </tr>
     #{/list}
     </table>

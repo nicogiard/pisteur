@@ -1,24 +1,23 @@
-#{extends 'template.html' /}
-#{set title: (user?.id != null) ? ("Modification de l''utilisateur " + user.firstName + " " + user.lastName) :  "Nouvel utilisateur"/}
+#{extends 'main.html' /}
+#{set title: "Inscription"/}
 
-<h1 class="screen-title"><i class="big-icon-user"></i>&nbsp;Utilisateurs</h1>
-<h2 class="screen-title">
-    #{if user?.id!=null}
-        Modification de l'utilisateur ${user.firstName} ${user.lastName}
-    #{/if}
-    #{else}
-        Nouvel utilisateur
-    #{/else}
-</h2>
+<h1 class="screen-title"><i class="big-icon-user"></i>&nbsp;Inscription</h1>
 
 #{alerts /}
-<form action="@{Users.save()}" method="POST" class="form-horizontal">
-    <input type="hidden" name="user.id" value="${user?.id}">
+<form action="@{Guests.save()}" method="POST" class="form-horizontal">    
     <div class="control-group #{ifError 'user.username'}error#{/ifError}">
         <label class="control-label">Identifiant</label>
         <div class="controls">
             <input type="text" autocomplete="off" #{if user?.id != null}readonly="readonly"#{/if} name="user.username" value="${flash.get('user.username') != null ? flash.get('user.username') : (user?.id != null) ? user?.username : null}">
         #{ifError 'user.username'}<span class="help-inline">#{error 'user.username' /}</span>#{/ifError}
+        #{else }<span class="help-inline">&{'validation.required'}</span>#{/else}
+        </div>
+    </div>
+    <div class="control-group #{ifError 'user.password'}error#{/ifError}">
+        <label class="control-label">Mot de passe</label>
+        <div class="controls">
+            <input type="text" autocomplete="off" #{if user?.id != null}readonly="readonly"#{/if} name="user.password" value="${flash.get('user.password') != null ? flash.get('user.password') : (user?.id != null) ? user?.password : null}">
+        #{ifError 'user.password'}<span class="help-inline">#{error 'user.password' /}</span>#{/ifError}
         #{else }<span class="help-inline">&{'validation.required'}</span>#{/else}
         </div>
     </div>
@@ -49,22 +48,15 @@
     <div class="control-group #{ifError 'user.ipAddress'}error#{/ifError}">
         <label class="control-label">Adresse IP</label>
         <div class="controls">
-            <input type="text" name="user.ipAddress" value="${flash.get('user.ipAddress') != null ? flash.get('user.ipAddress') : user?.ipAddress}">
+            <input type="text" name="user.ipAddress" value="${flash.get('user.ipAddress') != null ? flash.get('user.ipAddress') : user?.ipAddress}">            
         #{ifError 'user.ipAddress'}<span class="help-inline">#{error 'user.ipAddress' /}</span>#{/ifError}
         #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
+        <br />Votre adress ip actuelle : ${ipAdress}
         </div>
     </div>
-    #{if 'currentUser.isAdmin'}
-    <div class="control-group">
-        <label class="control-label">Administrateur</label>
-        <div class="controls">
-            <input type="checkbox" name="user.isAdmin" #{if user?.id != null} ${user.isAdmin ? 'checked=\"checked\"' : ''}  #{/if} />            
-        </div>
-    </div>
-    #{/if}
     <div class="form-actions">
-    <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i>&nbsp;Enregistrer</button>
-    <a href="@{Users.index}" class="btn"><i class="icon-ban-circle"></i>&nbsp;Annuler</a>
+    <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i>&nbsp;s'inscrire</button>
+    <a href="@{Application.index}" class="btn"><i class="icon-ban-circle"></i>&nbsp;Annuler</a>
     </div>
 </form>
 

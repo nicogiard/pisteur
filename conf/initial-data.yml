@@ -7,13 +7,17 @@ User(nicogiard):
   email: n@g.com
   firstName: Nicolas
   lastName: Giard
+  isActive: true
+  isAdmin: true
 
 User(miumius):
   username: miumius
-  password: 4ab13d05b97544ec9e1c26bc58e3794d958456c8
+  password: miumius
   email: c.l@g.com
   firstName: Cédric
   lastName: Lemius
+  isActive: true
+  isAdmin: true
 
 User(greg):
   username: greg
@@ -21,6 +25,7 @@ User(greg):
   email: g.l@gg.com
   firstName: Grégory
   lastName: Le Garec
+  isActive: true
 
 #--------------
 # Tag

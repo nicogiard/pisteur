@@ -7,7 +7,7 @@ public class Pager {
 	private int pageCount;
 	private long elementCount;
 
-	public static final int DEFAULT_PER_PAGE = 2;
+	public static final int DEFAULT_PER_PAGE = 10;
 	public static final int MAX_PAGE = 7;
 
 	public Pager() {

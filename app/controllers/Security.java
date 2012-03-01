@@ -7,7 +7,7 @@ public class Security extends Secure.Security {
 
     static boolean authenticate(String username, String password) {
         User user = User.find("username=?", username).first();
-        if (user != null && user.checkPassword(password)) {
+        if (user != null && user.checkPassword(password) && user.isActive) {
             return true;
         }
         return false;
@@ -27,5 +27,10 @@ public class Security extends Secure.Security {
 
     static void onDisconnected() {
         redirect("Secure.login");
+    }
+    
+    static boolean check(String profile) {
+        User user = User.find("byUsername", connected()).first();
+        return user.isAdmin;
     }
 }

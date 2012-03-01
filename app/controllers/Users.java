@@ -30,7 +30,8 @@ public class Users extends Controller {
         USERS_PAGER.setElementCount(models.User.count());
         List<User> users = User.find("").fetch(USERS_PAGER.getPage(), USERS_PAGER.getPageSize());
         Pager pager = USERS_PAGER;
-        render(users, pager);
+        User currentUser = Security.connectedUser();
+        render(users, pager, currentUser);
     }
 
     public static void filter(String letter) {
@@ -48,6 +49,14 @@ public class Users extends Controller {
         User user = User.findById(userId);
         notFoundIfNull(user);
         render(user);
+    }
+    
+    @Check("isAdmin")
+    public static void activate(long id){
+    	User user = User.findById(id);    	
+    	user.isActive = !user.isActive;
+    	user.save();
+    	index();
     }
 
     public static void save(@Required @Valid User user) {
