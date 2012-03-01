@@ -1,6 +1,16 @@
 #{extends 'main.html' /}
 #{set title: "Inscription"/}
 
+#{set 'moreScripts'}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#myIpAddress').live("click", function(e){
+        $('#user_ipAddress').val($(this).attr("data-ipadress"));
+    });
+});
+</script>
+#{/set}
+
 <h1 class="screen-title"><i class="big-icon-user"></i>&nbsp;Inscription</h1>
 
 #{alerts /}
@@ -48,10 +58,10 @@
     <div class="control-group #{ifError 'user.ipAddress'}error#{/ifError}">
         <label class="control-label">Adresse IP</label>
         <div class="controls">
-            <input type="text" name="user.ipAddress" value="${flash.get('user.ipAddress') != null ? flash.get('user.ipAddress') : user?.ipAddress}">            
+            <input type="text" id="user_ipAddress" name="user.ipAddress" value="${flash.get('user.ipAddress') != null ? flash.get('user.ipAddress') : user?.ipAddress}">
         #{ifError 'user.ipAddress'}<span class="help-inline">#{error 'user.ipAddress' /}</span>#{/ifError}
         #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
-        <br />Votre adress ip actuelle : ${ipAdress}
+        <br />Votre adress ip actuelle : <a href="#!" id="myIpAddress" title="Cliquer pour utiliser cette adresse ip" data-ipadress="${ipAdress}">${ipAdress}</a>
         </div>
     </div>
     <div class="form-actions">

@@ -13,7 +13,6 @@ public class Guests extends Controller {
 	 }
 	 
 	 public static void save(@Required @Valid User user) {
-
         if (validation.hasErrors()) {
             flash.error("Veuillez corriger les erreurs");
             params.flash();
