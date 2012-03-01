@@ -107,13 +107,13 @@ public class Torrent extends Model {
         return Torrent.count("FROM Torrent t JOIN t.tags AS tag WHERE tag.name=?", tag.name);
     }
     
-    public static List<Torrent> search(String keywords, int page, int length){    	
+    public static List<Torrent> search(String keywords, int offset, int length){    	
     	List<Torrent> torrents = Lists.newArrayList();
 	    if(!Strings.isNullOrEmpty(keywords)) {
 	        String trimKeywords = keywords.trim().toLowerCase();
 	        String queryString = "filename:"+trimKeywords+" OR description:"+trimKeywords;
 		    Query query = Search.search(queryString, Torrent.class);
-		    torrents = query.fetch();
+		    torrents = query.page(offset, length).fetch();
 	    }
 	    return torrents;
     }

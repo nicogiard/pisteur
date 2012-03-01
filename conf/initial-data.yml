@@ -78,14 +78,42 @@ Torrent(file3):
 
 Torrent(totoro):
   filename: totoro
-  descritpion: totoro de miyazaki
+  description: totoro de miyazaki
   tags:
     - tagAnimation
   uploader: miumius
 
 Torrent(chihiro):
   filename: le_voyage_de_chihiro
-  descritpion: le voyage de chihiro de miyazaki
+  description: le voyage de chihiro de miyazaki
   tags:
     - tagAnimation
   uploader: miumius
+  
+Torrent(transformer1):
+  filename: Transformers 1 
+  description: c'est mon film péféré, j'adore les robots
+  tags:
+    - tagFilm
+  uploader: greg
+  
+Torrent(transformer2):
+  filename: Transformers 2
+  description: Ils sont trop beau les robots, j'étais triste quand optimus il meurt.
+  tags:
+    - tagFilm
+  uploader: greg
+  
+Torrent(transformer3):
+  filename: Transformers 3
+  description: J'avoue j'ai adoré le scénario !
+  tags:
+    - tagFilm
+  uploader: greg
+  
+Torrent(fastandfurious):
+  filename: Fast and Furious
+  description: Un de mes meilleurs souvenir de cinéma.
+  tags:
+    - tagFilm
+  uploader: greg

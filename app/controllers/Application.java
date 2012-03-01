@@ -56,9 +56,9 @@ public class Application extends Controller {
 
     public static void search(String keywords) {
         TORRENTS_PAGER.setElementCount(Torrent.countSearch(keywords));
-        List<Torrent> torrents = Torrent.search(keywords, TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
+        List<Torrent> torrents = Torrent.search(keywords, (TORRENTS_PAGER.getPage() - 1) * TORRENTS_PAGER.getPageSize(), TORRENTS_PAGER.getPageSize());
         Pager pager = TORRENTS_PAGER;
-        renderTemplate("Application/index.html", pager, keywords, torrents);
+        renderTemplate("Application/index.html", pager, keywords, torrents, keywords);
     }
 
     public static void create() {

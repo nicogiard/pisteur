@@ -71,6 +71,9 @@ $('.btn-detail').live("click", function(e) {
         #{if activeTag}
             <div class="pagination">#{pager pager, url:actionBridge.Application.tag(activeTag.name) /}</div>
         #{/if}
+        #{elseif keywords}
+            <div class="pagination">#{pager pager, url:actionBridge.Application.search(keywords) /}</div>
+        #{/elseif}
         #{else}
             <div class="pagination">#{pager pager, url:actionBridge.Application.index() /}</div>
         #{/else}
