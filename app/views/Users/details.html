@@ -17,24 +17,7 @@ $('.btn-detail').live("click", function(e) {
 </script>
 #{/set}
 
-<h1 class="screen-title"><i class="big-icon-page"></i>&nbsp;Torrents</h1>
-
-<div class="subnav">
-    <ul class="nav nav-pills">
-        <li #{if !activeTag}class="active"#{/if}><a href="@{Application.index}">Tous</a></li>
-    #{list tags, as:'tag'}
-        <li #{if activeTag && activeTag.name == tag.name}class="active"#{/if}><a href="@{Application.tag(tag.name)}">${tag.name}</a></li>
-    #{/list}
-    </ul>
-</div>
-
-<div class="container">
-#{form @Application.search(), class:"form-search pull-left", style:"margin: 18px 0;"}
-    <input type="text" name="keywords" class="search-query" placeholder="Recherche" value="${keywords}">
-    <button type="submit" class="btn">Rechercher</button>
-#{/form}
-<a href="@{Application.create()}" class="btn btn-primary pull-right" style="margin:18px 0;"><i class="icon-plus icon-white" title="Ajouter un Torrent"></i>Ajouter un Torrent</a>
-</div>
+<h1 class="screen-title"><i class="big-icon-page"></i>&nbsp;Torrents de ${user.username}</h1>
 
 <div class="container">
 #{alerts /}
@@ -53,7 +36,7 @@ $('.btn-detail').live("click", function(e) {
                 <a href="#!" class="btn-detail" data-id="${torrent.id}">${torrent.filename}</a>
                 <a href="@{Application.getTorrentFile(torrent.id)}" class="pull-right" title="T&eacute;l&eacute;charger le torrent ${torrent.filename}"><i class="icon-download"></i>T&eacute;l&eacute;charger</a>
             </td>
-            <td><a href="@{Users.details(torrent.uploader?.id)}">${torrent.uploader?.username}</a></td>
+            <td>${torrent.uploader?.username}</td>
             <td>
                 #{list torrent.tags, as:'tag'}
                     <a href="@{Application.tag(tag.name)}" class="tag"><i class="icon-tag"></i>${tag.name}</a>${tag_isLast ? '' : ',' }
@@ -68,15 +51,7 @@ $('.btn-detail').live("click", function(e) {
     </table>
 
     #{if pager.pageCount > 1}
-        #{if activeTag}
-            <div class="pagination">#{pager pager, url:actionBridge.Application.tag(activeTag.name) /}</div>
-        #{/if}
-        #{elseif keywords}
-            <div class="pagination">#{pager pager, url:actionBridge.Application.search(keywords) /}</div>
-        #{/elseif}
-        #{else}
-            <div class="pagination">#{pager pager, url:actionBridge.Application.index() /}</div>
-        #{/else}
+        <div class="pagination">#{pager pager, url:actionBridge.Users.details(user.id) /}</div>
     #{/if}
 #{/if}
 #{else}

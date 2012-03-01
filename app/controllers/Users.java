@@ -17,6 +17,8 @@ public class Users extends Controller {
 
     private static final Pager USERS_PAGER = new Pager();
 
+    private static final Pager TORRENTS_PAGER = new Pager();
+
     @Before
     static void defaultData() {
         // Récupération de la pagination
@@ -26,6 +28,9 @@ public class Users extends Controller {
         }
         USERS_PAGER.setPage(Integer.valueOf(pageParam));
         session.put("usersPager.page", pageParam);
+
+        TORRENTS_PAGER.setPage(Integer.valueOf(pageParam));
+        session.put("torrentsPager.page", pageParam);
     }
 
     public static void index() {
@@ -90,5 +95,14 @@ public class Users extends Controller {
         user.delete();
         flash.success("L'utilisateur a correctement été supprimé");
         index();
+    }
+
+    public static void details(Long userId) {
+        User user = User.findById(userId);
+        notFoundIfNull(user);
+        TORRENTS_PAGER.setElementCount(Torrent.count("uploader=?", user));
+        List<Torrent> torrents = Torrent.find("uploader=?", user).fetch(TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
+        Pager pager = TORRENTS_PAGER;
+        render(user, torrents, pager);
     }
 }
