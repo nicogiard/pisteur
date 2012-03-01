@@ -1,9 +1,11 @@
 package controllers;
 
 import controllers.utils.Pager;
+import models.Torrent;
 import models.User;
 import play.data.validation.Required;
 import play.data.validation.Valid;
+import play.db.jpa.JPA;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -50,17 +52,8 @@ public class Users extends Controller {
         notFoundIfNull(user);
         render(user);
     }
-    
-    @Check("isAdmin")
-    public static void activate(long id){
-    	User user = User.findById(id);    	
-    	user.isActive = !user.isActive;
-    	user.save();
-    	index();
-    }
 
     public static void save(@Required @Valid User user) {
-
         if (validation.hasErrors()) {
             flash.error("Veuillez corriger les erreurs");
             params.flash();
@@ -75,6 +68,25 @@ public class Users extends Controller {
 
         user.save();
         flash.success("L'utilisateur a correctement été enregistré");
+        index();
+    }
+
+    @Check("isAdmin")
+    public static void activate(Long userId) {
+        User user = User.findById(userId);
+        notFoundIfNull(user);
+        user.isActive = !user.isActive;
+        user.save();
+        index();
+    }
+
+    public static void delete(Long userId) {
+        User user = User.findById(userId);
+        notFoundIfNull(user);
+        int result = JPA.em().createNativeQuery("DELETE FROM Torrent_Tag WHERE torrent_id IN (SELECT tota.torrent_id FROM Torrent_Tag tota INNER JOIN Torrent t ON tota.torrent_id = t.id WHERE t.uploader_id=?)").setParameter(1, user.id).executeUpdate();
+        Torrent.delete("uploader=?", user);
+        user.delete();
+        flash.success("L'utilisateur a correctement été supprimé");
         index();
     }
 }

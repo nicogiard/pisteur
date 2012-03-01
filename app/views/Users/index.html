@@ -31,10 +31,10 @@
             <th>Identifiant</th>
             <th>Email</th>
             <th>Adresse IP</th>
-            <th>Actions</th>
             #{if currentUser.isAdmin}
                 <th>Actif</th>
             #{/if}
+            <th>Actions</th>
             
         </tr>
     #{list users, as:'user'}
@@ -44,14 +44,15 @@
             <td>${user.username}</td>
             <td><a href="mailto:${user.email}">${user.email}</a></td>
             <td>${user.ipAddress}</td>
+            #{if currentUser.isAdmin}
+                <td>
+                    <a href="@{Users.activate(user.id)}"><span class="label label-${user.isActive ? 'success' : 'important'}">${user.isActive ? 'Actif' : 'Non actif'}</span></a>
+                </td>
+            #{/if}
             <td class="actions">
                 <a href="@{Users.update(user.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>&nbsp;Modifier</a>
+                <a href="@{Users.delete(user.id)}" class="btn btn-danger" onclick="if(!confirm('Etes vous sûr de vouloir supprimer cet utilisateur (ainsi que tous ses torrents) ?'))return false;" title="Supprimer"><i class="icon-trash icon-white"></i>Supprimer</a>
             </td>
-            #{if currentUser.isAdmin}
-            <td>
-                <a href="@{Users.activate(user.id)}"><span class="label label-${user.isActive ? 'success' : 'important'}">${user.isActive ? 'Actif' : 'Non actif'}</span></a>
-            </td>
-            #{/if}
         </tr>
     #{/list}
     </table>
