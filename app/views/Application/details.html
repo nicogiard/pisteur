@@ -13,7 +13,7 @@
     </div>
     <div class="control-group">
         <label class="control-label">Uploader :</label>
-        <span>${!torrent.uploader?.username ? "&nbsp;".raw() : torrent.uploader?.username}</span>
+        <span>#{if !torrent.uploader?.username}&nbsp;#{/if}#{else}<a href="@{Users.details(torrent.uploader?.id)}">${torrent.uploader?.username}</a>#{/else}</span>
     </div>
     <div class="control-group">
         <label class="control-label">Tags :</label>

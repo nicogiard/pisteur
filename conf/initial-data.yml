@@ -64,21 +64,21 @@ Tag(tagAnimation):
 # Torrent
 #--------------
 Torrent(file1):
-  filename: film1  
+  filename: Star Wars - Episode IV - A new hope
   tags:
     - tagFilm
     - tagScienceFiction
   uploader: nicogiard
 
 Torrent(file2):
-  filename: film2
+  filename: Battlestar Gallactica - Saison 1
   tags:
     - tagSerie
     - tagScienceFiction
   uploader: nicogiard
 
 Torrent(file3):
-  filename: film3
+  filename: Game of Thrones - episode 1x1
   tags:
     - tagSerie
     - tagMedieval
