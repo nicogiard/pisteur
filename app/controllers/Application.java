@@ -106,16 +106,16 @@ public class Application extends Controller {
     }
 
 
-    public static void delete(Long id) {
-        Torrent torrent = Torrent.findById(id);
+    public static void delete(Long torrentId) {
+        Torrent torrent = Torrent.findById(torrentId);
         notFoundIfNull(torrent);
         torrent.delete();
         flash.success("Le torrent a été supprimé avec succès");
         index();
     }
 
-    public static void details(Long id) {
-        Torrent torrent = Torrent.findById(id);
+    public static void details(Long torrentId) {
+        Torrent torrent = Torrent.findById(torrentId);
         notFoundIfNull(torrent);
         render(torrent);
     }
