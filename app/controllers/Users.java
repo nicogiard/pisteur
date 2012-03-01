@@ -44,13 +44,15 @@ public class Users extends Controller {
     }
 
     public static void create() {
-        renderTemplate("Users/update.html");
+        String ipAdress = request.remoteAddress;
+        renderTemplate("Users/update.html", ipAdress);
     }
 
     public static void update(Long userId) {
         User user = User.findById(userId);
         notFoundIfNull(user);
-        render(user);
+        String ipAdress = request.remoteAddress;
+        render(user, ipAdress);
     }
 
     public static void save(@Required @Valid User user) {
