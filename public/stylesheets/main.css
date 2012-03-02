@@ -83,3 +83,7 @@ h2.screen-title {
     -moz-border-radius: 0;
     border-radius: 0;
 }
+
+.opacity50{
+    opacity: 0.5;
+}

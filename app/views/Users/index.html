@@ -46,7 +46,8 @@
             <td>${user.ipAddress}</td>
             #{if currentUser.isAdmin}
                 <td>
-                    <a href="@{Users.activate(user.id)}"><span class="label label-${user.isActive ? 'success' : 'important'}">${user.isActive ? 'Actif' : 'Non actif'}</span></a>
+                    <a href="@{Users.activate(user.id)}"><span class="label label-success ${user.isActive ? '' : 'opacity50'}" >Actif</span></a>
+                    <a href="@{Users.activate(user.id)}"><span class="label label-important ${user.isActive ? 'opacity50' : ''}">Non actif</span></a>
                 </td>
             #{/if}
             <td class="actions">

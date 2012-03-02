@@ -65,14 +65,13 @@
         <br />Votre adress ip actuelle : <a href="#!" id="myIpAddress" title="Cliquer pour utiliser cette adresse ip" data-ipadress="${ipAdress}">${ipAdress}</a>
         </div>
     </div>
-    #{if 'currentUser.isAdmin'}
     <div class="control-group">
         <label class="control-label">Administrateur</label>
         <div class="controls">
-            <input type="checkbox" name="user.isAdmin" #{if user?.id != null} ${user.isAdmin ? 'checked=\"checked\"' : ''}  #{/if} />            
+            <input type="checkbox" name="user.isAdmin" value="true" #{if user?.id != null} ${user.isAdmin ? 'checked=\"checked\"' : ''}  #{/if} />            
+            <input type="hidden" name="user.isAdmin" value="false" />
         </div>
     </div>
-    #{/if}
     <div class="form-actions">
     <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i>&nbsp;Enregistrer</button>
     <a href="@{Users.index}" class="btn"><i class="icon-ban-circle"></i>&nbsp;Annuler</a>
