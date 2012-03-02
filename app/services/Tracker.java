@@ -182,7 +182,10 @@ public class Tracker {
             if (peer == null) {
             	if(User.isActive(announceParams.get("ip"))){
             		new_peer();
-            	}                
+            	}
+            	else{
+            		error("Vous n'êtes pas autorisé à utiliser ce trackeur");
+            	}
             } else if (peer.ip != announceParams.get("ip") || peer.port != Integer.valueOf(announceParams.get("port")) || peer.state != seedings) {
                 update_peer();
             } else {
