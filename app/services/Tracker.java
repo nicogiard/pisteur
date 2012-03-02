@@ -1,6 +1,7 @@
 package services;
 
 import exception.tracker.AnnounceException;
+import exception.tracker.UnknownUserException;
 import models.User;
 import models.tracker.Peer;
 import org.apache.commons.lang.math.NumberUtils;
@@ -162,7 +163,7 @@ public class Tracker {
         return response;
     }
 
-    public void event() {
+    public void event() throws UnknownUserException{
         Logger.debug("Tracker|event");
 
         String event = "none";
@@ -184,7 +185,8 @@ public class Tracker {
             		new_peer();
             	}
             	else{
-            		error("Vous n'êtes pas autorisé à utiliser ce trackeur");
+            		Logger.debug("utilisateur(ip: ?) non autorisé", announceParams.get("ip"));
+            		throw new UnknownUserException("Vous n'êtes pas autorisé à utiliser ce trackeur");            		
             	}
             } else if (peer.ip != announceParams.get("ip") || peer.port != Integer.valueOf(announceParams.get("port")) || peer.state != seedings) {
                 update_peer();

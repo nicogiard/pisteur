@@ -1,6 +1,7 @@
 package controllers;
 
 import exception.tracker.AnnounceException;
+import exception.tracker.UnknownUserException;
 import play.Logger;
 import play.mvc.Controller;
 import services.Tracker;
@@ -42,7 +43,10 @@ public class Announce extends Controller {
         } catch (AnnounceException e) {
             Logger.error("Announce|index : An error occured : %s", e.getMessage());
             reponse = Tracker.error(e.getMessage());
-        }
+        } catch (UnknownUserException e) {
+        	Logger.warn("Announce|index : An error occured : %s", e.getMessage());
+            reponse = Tracker.error(e.getMessage());
+		}
         renderText(reponse);
     }
 }
