@@ -56,4 +56,8 @@ public class User extends Model {
     		this.password = Codec.hexSHA1(password);
     	}
     }
+    
+    public static boolean isActive(String ipAdress){
+    	return User.count("ipAdress LIKE ? AND isActive = true", ipAdress) > 0;
+    }
 }

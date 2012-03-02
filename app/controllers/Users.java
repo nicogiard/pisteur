@@ -104,5 +104,5 @@ public class Users extends Controller {
         List<Torrent> torrents = Torrent.find("uploader=?", user).fetch(TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
         Pager pager = TORRENTS_PAGER;
         render(user, torrents, pager);
-    }
+    }    
 }

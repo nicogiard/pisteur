@@ -1,11 +1,13 @@
 package services;
 
 import exception.tracker.AnnounceException;
+import models.User;
 import models.tracker.Peer;
 import org.apache.commons.lang.math.NumberUtils;
 import play.Logger;
 import play.db.jpa.JPA;
 import play.mvc.Http;
+import play.mvc.Http.Request;
 import utils.Constants;
 
 import java.io.UnsupportedEncodingException;
@@ -49,7 +51,6 @@ public class Tracker {
 
     public static Map<String, String> getParams(Http.Request request) throws UnsupportedEncodingException {
         Logger.debug("Tracker|getParams : querystring = %s", request.querystring);
-
         Map<String, String> announceParams = new HashMap<String, String>();
         String[] keyValues = request.querystring.split("&");
         for (String keyValue : keyValues) {
@@ -94,7 +95,7 @@ public class Tracker {
         else if (!announceParams.containsKey("left") || !NumberUtils.isNumber(announceParams.get("left"))) {
             throw new AnnounceException("client data left field is invalid");
         }
-
+        
         // TODO faire le reste des parameters
 
         // compact - optional
@@ -175,11 +176,13 @@ public class Tracker {
         if ("stopped".equals(event)) { // client gracefully exited
             delete_peer();
         } else {
-            if ("completed".equals(event)) { // client completed download
+            if ("completed".equals(event)) { // client completed download            	
                 seedings = 1;
             }
             if (peer == null) {
-                new_peer();
+            	if(User.isActive(announceParams.get("ip"))){
+            		new_peer();
+            	}                
             } else if (peer.ip != announceParams.get("ip") || peer.port != Integer.valueOf(announceParams.get("port")) || peer.state != seedings) {
                 update_peer();
             } else {

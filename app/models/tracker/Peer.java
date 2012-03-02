@@ -22,4 +22,5 @@ public class Peer extends Model {
         this.peer_id = announceParams.get("peer_id");
         this.port = Integer.parseInt(announceParams.get("port"));
     }
+    
 }
