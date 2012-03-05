@@ -8,8 +8,8 @@ import org.apache.commons.lang.math.NumberUtils;
 import play.Logger;
 import play.db.jpa.JPA;
 import play.mvc.Http;
-import play.mvc.Http.Request;
 import utils.Constants;
+import utils.Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -81,22 +81,43 @@ public class Tracker {
         Logger.debug("Tracker|validateParameters : start verificating parameters...");
 
         // Si info_hash n'existe pas et si length() != 20
-        if (!announceParams.containsKey("info_hash") || announceParams.get("info_hash").length() != 20) {
-            throw new AnnounceException("info_hash is not found or incorrect");
+        if (!announceParams.containsKey("info_hash")) {
+            throw new AnnounceException("info_hash is not found");
+        } else {
+            try {
+                String hash = Utils.byteArrayToByteString(announceParams.get("info_hash").getBytes(Constants.BYTE_ENCODING));
+                announceParams.put("info_hash", hash);
+            } catch (UnsupportedEncodingException e) {
+                throw new AnnounceException("info_hash is incorrect");
+            }
+            if (announceParams.get("info_hash").length() != 20) {
+                throw new AnnounceException("info_hash is incorrect");
+            }
         }
         // Si peer_id n'existe pas et si length() != 20
-        else if (!announceParams.containsKey("peer_id") || announceParams.get("peer_id").length() != 20) {
-            throw new AnnounceException("peer_id is not found or incorrect");
+        if (!announceParams.containsKey("peer_id")) {
+            throw new AnnounceException("peer_id is not found");
+        } else {
+            try {
+                String peerid = Utils.byteArrayToByteString(announceParams.get("peer_id").getBytes(Constants.BYTE_ENCODING));
+                announceParams.put("peer_id", peerid);
+            } catch (UnsupportedEncodingException e) {
+                throw new AnnounceException("peer_id is incorrect");
+            }
+            if (announceParams.get("peer_id").length() != 20) {
+                throw new AnnounceException("peer_id is incorrect");
+            }
         }
+
         // Si port n'existe pas et si port n'est pas numeric
-        else if (!announceParams.containsKey("port") || !NumberUtils.isNumber(announceParams.get("port"))) {
+        if (!announceParams.containsKey("port") || !NumberUtils.isNumber(announceParams.get("port"))) {
             throw new AnnounceException("client listening port is invalid");
         }
         // Si left n'existe pas et si left n'est pas numeric
         else if (!announceParams.containsKey("left") || !NumberUtils.isNumber(announceParams.get("left"))) {
             throw new AnnounceException("client data left field is invalid");
         }
-        
+
         // TODO faire le reste des parameters
 
         // compact - optional
@@ -163,7 +184,7 @@ public class Tracker {
         return response;
     }
 
-    public void event() throws UnknownUserException{
+    public void event() throws UnknownUserException {
         String event = "none";
         if (announceParams.containsKey("event")) {
             event = announceParams.get("event");
@@ -179,13 +200,12 @@ public class Tracker {
                 seedings = 1;
             }
             if (peer == null) {
-            	if(User.isActive(announceParams.get("ip"))){
-            		new_peer();
-            	}
-            	else{
-            		Logger.debug("Tracker|event : utilisateur(ip: %s) non autorisé", announceParams.get("ip"));
-            		throw new UnknownUserException("Vous n'êtes pas autorisé à utiliser ce trackeur");            		
-            	}
+                if (User.isActive(announceParams.get("ip"))) {
+                    new_peer();
+                } else {
+                    Logger.debug("Tracker|event : utilisateur(ip: %s) non autorisé", announceParams.get("ip"));
+                    throw new UnknownUserException("Vous n'êtes pas autorisé à utiliser ce trackeur");
+                }
             } else if (peer.ip != announceParams.get("ip") || peer.port != Integer.valueOf(announceParams.get("port")) || peer.state != seedings) {
                 update_peer();
             } else {
