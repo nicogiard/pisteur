@@ -41,7 +41,7 @@ import java.nio.charset.Charset;
 
 public class Constants {
     public static final String DEFAULT_ENCODING = "UTF8";
-    public static final String BYTE_ENCODING = "ISO-8859-1";
+    public static final String BYTE_ENCODING =  "UTF8"; // "ISO-8859-1";
     public static Charset BYTE_CHARSET;
     public static Charset DEFAULT_CHARSET;
 
