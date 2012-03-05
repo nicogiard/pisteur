@@ -84,12 +84,14 @@ public class Tracker {
         if (!announceParams.containsKey("info_hash")) {
             throw new AnnounceException("info_hash is not found");
         } else {
+            /*
             try {
                 String hash = Utils.byteArrayToByteString(announceParams.get("info_hash").getBytes(Constants.BYTE_ENCODING));
                 announceParams.put("info_hash", hash);
             } catch (UnsupportedEncodingException e) {
                 throw new AnnounceException("info_hash is incorrect");
             }
+            */
             if (announceParams.get("info_hash").length() != 20) {
                 throw new AnnounceException("info_hash is incorrect");
             }
@@ -98,12 +100,14 @@ public class Tracker {
         if (!announceParams.containsKey("peer_id")) {
             throw new AnnounceException("peer_id is not found");
         } else {
+            /*
             try {
                 String peerid = Utils.byteArrayToByteString(announceParams.get("peer_id").getBytes(Constants.BYTE_ENCODING));
                 announceParams.put("peer_id", peerid);
             } catch (UnsupportedEncodingException e) {
                 throw new AnnounceException("peer_id is incorrect");
             }
+            */
             if (announceParams.get("peer_id").length() != 20) {
                 throw new AnnounceException("peer_id is incorrect");
             }
