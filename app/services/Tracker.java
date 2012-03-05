@@ -164,8 +164,6 @@ public class Tracker {
     }
 
     public void event() throws UnknownUserException{
-        Logger.debug("Tracker|event");
-
         String event = "none";
         if (announceParams.containsKey("event")) {
             event = announceParams.get("event");
@@ -185,7 +183,7 @@ public class Tracker {
             		new_peer();
             	}
             	else{
-            		Logger.debug("utilisateur(ip: ?) non autorisé", announceParams.get("ip"));
+            		Logger.debug("Tracker|event : utilisateur(ip: %s) non autorisé", announceParams.get("ip"));
             		throw new UnknownUserException("Vous n'êtes pas autorisé à utiliser ce trackeur");            		
             	}
             } else if (peer.ip != announceParams.get("ip") || peer.port != Integer.valueOf(announceParams.get("port")) || peer.state != seedings) {
