@@ -58,6 +58,6 @@ public class User extends Model {
     }
     
     public static boolean isActive(String ipAdress){
-    	return User.count("ipAdress LIKE ? AND isActive = true", ipAdress) > 0;
+    	return User.count("ipAddress LIKE ? AND isActive = true", ipAdress) > 0;
     }
 }
