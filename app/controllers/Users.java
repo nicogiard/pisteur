@@ -50,8 +50,8 @@ public class Users extends Controller {
 
     @Check("isAdmin")
     public static void create() {
-        String ipAdress = request.remoteAddress;
-        renderTemplate("Users/update.html", ipAdress);
+        String ipAddress = IPUtils.getIpFromRequest(request);
+        renderTemplate("Users/update.html", ipAddress);
     }
 
     @Check("isAdmin")
