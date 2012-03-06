@@ -23,7 +23,7 @@ public class Tracker {
     public Map<String, String> announceParams = null;
 
     public boolean open_tracker = true;
-    public int announce_interval = 1800;
+    public static int announce_interval = 1800;
     public int min_interval = 900;
     public int default_peers = 50;
     public int max_peers = 100;
@@ -218,10 +218,6 @@ public class Tracker {
                 update_last_access();
             }
         }
-    }
-
-    public void clean() {
-        // TODO a faire
     }
 
     private void delete_peer() {

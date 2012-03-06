@@ -24,8 +24,6 @@ public class Announce extends Controller {
 
             tracker.event();
 
-            tracker.clean();
-
             if (Logger.isDebugEnabled()) {
                 String info_hash = tracker.announceParams.get("info_hash");
                 String peer_id = tracker.announceParams.get("peer_id");
