@@ -9,6 +9,7 @@ import play.db.jpa.JPA;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
+import utils.IPUtils;
 
 import java.util.List;
 
@@ -57,8 +58,8 @@ public class Users extends Controller {
     public static void update(Long userId) {
         User user = User.findById(userId);
         notFoundIfNull(user);
-        String ipAdress = request.remoteAddress;
-        render(user, ipAdress);
+        String ipAddress = IPUtils.getIpFromRequest(request);
+        render(user, ipAddress);
     }
 
     @Check("isAdmin")
@@ -107,5 +108,5 @@ public class Users extends Controller {
         List<Torrent> torrents = Torrent.find("uploader=?", user).fetch(TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
         Pager pager = TORRENTS_PAGER;
         render(user, torrents, pager);
-    }    
+    }
 }

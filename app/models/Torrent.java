@@ -53,7 +53,7 @@ public class Torrent extends Model {
 
     public File getFile() {
         if (file != null) {
-            File tempFile = new File(Play.configuration.getProperty("temp", "./tmp") + File.separator + "tempFile");
+            File tempFile = new File(Play.configuration.getProperty("temp") + File.separator + "tempFile");
             InputStream is = null;
             try {
                 is = file.getBinaryStream();
@@ -65,6 +65,7 @@ public class Torrent extends Model {
                 }
                 is.close();
                 os.close();
+                // TODO : faudrait gérer un peu mieux les exceptions ici
             } catch (SQLException e) {
                 e.printStackTrace();
             } catch (FileNotFoundException e) {

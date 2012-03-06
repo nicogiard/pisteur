@@ -9,7 +9,7 @@ import play.Logger;
 import play.db.jpa.JPA;
 import play.mvc.Http;
 import utils.Constants;
-import utils.Utils;
+import utils.IPUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -72,7 +72,9 @@ public class Tracker {
             }
         }
         if (!announceParams.containsKey("ip")) {
-            announceParams.put("ip", request.remoteAddress);
+            String ipAddress = IPUtils.getIpFromRequest(request);
+            Logger.debug("Tracker|getParams : ip : %s", ipAddress);
+            announceParams.put("ip", ipAddress);
         }
         return announceParams;
     }
