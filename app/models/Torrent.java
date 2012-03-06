@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.engine.jdbc.LobCreator;
+import play.Play;
 import play.data.binding.As;
 import play.data.validation.Required;
 import play.db.jpa.JPA;
@@ -27,13 +28,13 @@ import java.util.List;
 @Indexed
 @Entity
 public class Torrent extends Model {
-	
-	@Field
+
+    @Field
     @Required
     public String filename;
 
     private Blob file;
-    
+
     @Field
     @Column(columnDefinition = "TEXT")
     public String description;
@@ -52,7 +53,7 @@ public class Torrent extends Model {
 
     public File getFile() {
         if (file != null) {
-            File tempFile = new File("tempFile");
+            File tempFile = new File(Play.configuration.getProperty("temp", "./tmp") + File.separator + "tempFile");
             InputStream is = null;
             try {
                 is = file.getBinaryStream();
@@ -97,26 +98,26 @@ public class Torrent extends Model {
     public static long countTaggedWith(Tag tag) {
         return Torrent.count("FROM Torrent t JOIN t.tags AS tag WHERE tag.name=?", tag.name);
     }
-    
-    public static List<Torrent> search(String keywords, int offset, int length){    	
-    	List<Torrent> torrents = Lists.newArrayList();
-	    if(!Strings.isNullOrEmpty(keywords)) {
-	        String trimKeywords = keywords.trim().toLowerCase();
-	        String queryString = "filename:"+trimKeywords+" OR description:"+trimKeywords;
-		    Query query = Search.search(queryString, Torrent.class);
-		    torrents = query.page(offset, length).fetch();
-	    }
-	    return torrents;
+
+    public static List<Torrent> search(String keywords, int offset, int length) {
+        List<Torrent> torrents = Lists.newArrayList();
+        if (!Strings.isNullOrEmpty(keywords)) {
+            String trimKeywords = keywords.trim().toLowerCase();
+            String queryString = "filename:" + trimKeywords + " OR description:" + trimKeywords;
+            Query query = Search.search(queryString, Torrent.class);
+            torrents = query.page(offset, length).fetch();
+        }
+        return torrents;
     }
-    
-    public static long countSearch(String keywords){    	
-    	long count = 0;
-	    if(!Strings.isNullOrEmpty(keywords)) {
-	        String trimKeywords = keywords.trim();
-	        String queryString = "filename:"+trimKeywords+" OR description:"+trimKeywords;
-		    Query query = Search.search(queryString, Torrent.class);
-		    count = query.count();
-	    }
-	    return count;
+
+    public static long countSearch(String keywords) {
+        long count = 0;
+        if (!Strings.isNullOrEmpty(keywords)) {
+            String trimKeywords = keywords.trim();
+            String queryString = "filename:" + trimKeywords + " OR description:" + trimKeywords;
+            Query query = Search.search(queryString, Torrent.class);
+            count = query.count();
+        }
+        return count;
     }
 }
