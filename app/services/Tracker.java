@@ -39,7 +39,7 @@ public class Tracker {
     public Tracker(Http.Request request) throws UnsupportedEncodingException {
         announceParams = getParams(request);
 
-        if (announceParams.containsKey("left") && Integer.valueOf(announceParams.get("left")) == 0) {
+        if (announceParams.containsKey("left") && Long.valueOf(announceParams.get("left")) == 0) {
             seedings = 1;
         }
     }
