@@ -37,8 +37,7 @@ public class Users extends Controller {
         USERS_PAGER.setElementCount(models.User.count());
         List<User> users = User.find("").fetch(USERS_PAGER.getPage(), USERS_PAGER.getPageSize());
         Pager pager = USERS_PAGER;
-        User currentUser = Security.connectedUser();
-        render(users, pager, currentUser);
+        render(users, pager);
     }
 
     public static void filter(String letter) {
@@ -48,11 +47,13 @@ public class Users extends Controller {
         renderTemplate("Users/index.html", letter, users, pager);
     }
 
+    @Check("isAdmin")
     public static void create() {
         String ipAdress = request.remoteAddress;
         renderTemplate("Users/update.html", ipAdress);
     }
 
+    @Check("isAdmin")
     public static void update(Long userId) {
         User user = User.findById(userId);
         notFoundIfNull(user);
@@ -60,6 +61,7 @@ public class Users extends Controller {
         render(user, ipAdress);
     }
 
+    @Check("isAdmin")
     public static void save(@Required @Valid User user) {
         if (validation.hasErrors()) {
             flash.error("Veuillez corriger les erreurs");
@@ -87,6 +89,7 @@ public class Users extends Controller {
         index();
     }
 
+    @Check("isAdmin")
     public static void delete(Long userId) {
         User user = User.findById(userId);
         notFoundIfNull(user);
