@@ -43,8 +43,10 @@ $('.btn-detail').live("click", function(e) {
                 #{/list}
             </td>
             <td class="actions">
+                #{if controllers.Security.connectedUser() == torrent.uploader}
                 <a href="@{Application.update(torrent.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>Modifier</a>
                 <a href="@{Application.delete(torrent.id)}" class="btn btn-danger" onclick="if(!confirm('Etes vous sûr de vouloir supprimer ce torrent ?'))return false;" title="Supprimer"><i class="icon-trash icon-white"></i>Supprimer</a>
+                #{/if}
             </td>
         </tr>
     #{/list}

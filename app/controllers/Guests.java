@@ -4,12 +4,13 @@ import models.User;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Controller;
+import utils.IPUtils;
 
 public class Guests extends Controller {
 	
 	 public static void subscribe(){
-		 String ipAdress = request.remoteAddress;
-		 renderTemplate("Guests/subscribe.html", ipAdress);
+         String ipAddress = IPUtils.getIpFromRequest(request);
+		 renderTemplate("Guests/subscribe.html", ipAddress);
 	 }
 	 
 	 public static void save(@Required @Valid User user) {

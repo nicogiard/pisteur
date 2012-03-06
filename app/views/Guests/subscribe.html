@@ -61,7 +61,7 @@ $(document).ready(function() {
             <input type="text" id="user_ipAddress" name="user.ipAddress" value="${flash.get('user.ipAddress') != null ? flash.get('user.ipAddress') : user?.ipAddress}">
         #{ifError 'user.ipAddress'}<span class="help-inline">#{error 'user.ipAddress' /}</span>#{/ifError}
         #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
-        <br />Votre adress ip actuelle : <a href="#!" id="myIpAddress" title="Cliquer pour utiliser cette adresse ip" data-ipadress="${ipAdress}">${ipAdress}</a>
+        <br />Votre adress ip actuelle : <a href="#!" id="myIpAddress" title="Cliquer pour utiliser cette adresse ip" data-ipadress="${ipAddress}">${ipAddress}</a>
         </div>
     </div>
     <div class="form-actions">
