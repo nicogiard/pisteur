@@ -23,7 +23,7 @@ $(document).ready(function() {
 
 <div class="subnav">
     <ul class="nav nav-pills">
-        <li #{if request.action != "Application.noTag" && !activeTag}class="active"#{/if}><a href="@{Application.index}">Tous</a></li>
+        <li #{if request.action != "Application.noTag" && !activeTag && !keywords}class="active"#{/if}><a href="@{Application.index}">Tous</a></li>
         <li #{if request.action =~ "Application.noTag"}class="active"#{/if}><a href="@{Application.noTag}">Pas de Tag</a></li>
     #{list tags, as:'tag'}
         <li #{if activeTag && activeTag.name == tag.name}class="active"#{/if}><a href="@{Application.tag(tag.name)}">${tag.name}</a></li>
@@ -65,7 +65,9 @@ $(document).ready(function() {
             </td>
             <td class="actions">
                 <a href="@{Application.update(torrent.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>Modifier</a>
+                #{if controllers.Security.connectedUser() == torrent.uploader || controllers.Security.connectedUser().isAdmin}
                 <a href="@{Application.delete(torrent.id)}" class="btn btn-danger" onclick="if(!confirm('Etes vous sûr de vouloir supprimer ce torrent ?'))return false;" title="Supprimer"><i class="icon-trash icon-white"></i>Supprimer</a>
+                #{/if}
             </td>
         </tr>
     #{/list}
