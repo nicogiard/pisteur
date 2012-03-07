@@ -154,7 +154,6 @@ public class Application extends Controller {
         notFoundIfNull(torrent.getFile());
         File file = torrent.getFile();
         String filename = torrent.filename;
-        System.out.println(filename);
         if (!filename.endsWith(".torrent")) {
             filename += ".torrent";
         }
