@@ -50,9 +50,9 @@ public class Torrent extends Model {
 
     @As(lang = {"*"}, value = {"dd/MM/yyyy HH:mm:ss"})
     public Date modificationDate;
-    
+
     public String info_hash;
-    
+
     public File getFile() {
         if (file != null) {
             File tempFile = new File(Play.configuration.getProperty("temp") + File.separator + "tempFile");
@@ -100,6 +100,21 @@ public class Torrent extends Model {
 
     public static long countTaggedWith(Tag tag) {
         return Torrent.count("FROM Torrent t JOIN t.tags AS tag WHERE tag.name=?", tag.name);
+    }
+
+    public static List<Torrent> findNotTagged(int page, int length) {
+        int pageLimit = page;
+        if (pageLimit < 1) {
+            pageLimit = 1;
+        }
+        int startLimit = (pageLimit - 1) * length;
+        return (List<Torrent>) JPA.em().createNativeQuery("SELECT t.id, t.filename, t.description, t.file, t.uploader_id, t.creationDate, t.modificationDate, t.info_hash FROM Torrent t LEFT OUTER JOIN Torrent_Tag AS tt ON t.id = tt.torrent_id WHERE tt.torrent_id IS NULL LIMIT ? , ?", Torrent.class).setParameter(1, startLimit).setParameter(2, length).getResultList();
+    }
+
+    public static long countNotTagged() {
+        long count = JPA.em().createNativeQuery("SELECT COUNT(t.id) FROM Torrent t LEFT OUTER JOIN Torrent_Tag AS tt ON t.id = tt.torrent_id WHERE tt.torrent_id IS NULL").getFirstResult();
+        System.out.println(count);
+        return count;
     }
 
     public static List<Torrent> search(String keywords, int offset, int length) {

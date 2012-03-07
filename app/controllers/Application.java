@@ -55,6 +55,13 @@ public class Application extends Controller {
         renderTemplate("Application/index.html", pager, torrents, activeTag);
     }
 
+    public static void noTag() {
+        TORRENTS_PAGER.setElementCount(Torrent.countNotTagged());
+        List<Torrent> torrents = Torrent.findNotTagged(TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
+        Pager pager = TORRENTS_PAGER;
+        renderTemplate("Application/index.html", torrents, pager);
+    }
+
     public static void search(String keywords) {
         TORRENTS_PAGER.setElementCount(Torrent.countSearch(keywords));
         List<Torrent> torrents = Torrent.search(keywords, (TORRENTS_PAGER.getPage() - 1) * TORRENTS_PAGER.getPageSize(), TORRENTS_PAGER.getPageSize());
