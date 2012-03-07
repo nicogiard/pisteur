@@ -1,6 +1,5 @@
 #{set 'moreScripts'}
     #{get 'moreScripts' /}
-    <script type="text/javascript" src="@{'/public/javascripts/bootstrap.js'}"></script>
     <script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
     <script type="text/javascript" src="@{'/public/javascripts/plupload/plupload.js'}"></script>
     <script type="text/javascript" src="@{'/public/javascripts/plupload/plupload.gears.js'}"></script>
