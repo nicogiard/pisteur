@@ -23,4 +23,7 @@ public class Peer extends Model {
         this.port = Integer.parseInt(announceParams.get("port"));
     }
     
+    public static long countSeeder(String info_hash){
+    	return Peer.count("info_hash = ? AND state = 1", info_hash);
+    }
 }

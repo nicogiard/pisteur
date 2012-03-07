@@ -49,7 +49,9 @@ public class Torrent extends Model {
 
     @As(lang = {"*"}, value = {"dd/MM/yyyy HH:mm:ss"})
     public Date modificationDate;
-
+    
+    public String info_hash;
+    
     public File getFile() {
         if (file != null) {
             File tempFile = new File("tempFile");
