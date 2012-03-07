@@ -11,6 +11,7 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.With;
 
 import java.io.File;
@@ -105,6 +106,26 @@ public class Application extends Controller {
         index();
     }
 
+    public static String uploadMultiple(File file) {
+        Http.Response response = Http.Response.current();
+        response.setHeader("Server", "Web Server");
+        response.setHeader("Expires", "Mon, 26 Jul 1997 05:00:00 GMT");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+
+        Torrent torrent = new Torrent();
+        try {
+            torrent.uploader = Security.connectedUser();
+            torrent.creationDate = new Date();
+            torrent.setFile(file);
+            torrent.filename = file.getName();
+        } catch (FileNotFoundException e) {
+            return "{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 101, \"message\": \"Failed to open input stream.\"}, \"id\" : \"id\"}";
+        }
+        torrent.save();
+
+        return "{\"jsonrpc\" : \"2.0\", \"result\" : null, \"id\" : \"id\"}";
+    }
 
     public static void delete(Long torrentId) {
         Torrent torrent = Torrent.findById(torrentId);
