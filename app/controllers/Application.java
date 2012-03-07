@@ -153,7 +153,11 @@ public class Application extends Controller {
         notFoundIfNull(torrent);
         notFoundIfNull(torrent.getFile());
         File file = torrent.getFile();
-        renderBinary(file, torrent.filename);
+        String filename = torrent.filename;
+        if (filename.endsWith(".torrent")) {
+            filename += ".torrent";
+        }
+        renderBinary(file, filename);
     }
 
     private static List<Tag> extractTags(String tags) {
