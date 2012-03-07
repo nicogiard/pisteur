@@ -153,8 +153,8 @@ public class Application extends Controller {
         notFoundIfNull(torrent);
         notFoundIfNull(torrent.getFile());
         File file = torrent.getFile();
-        String filename = torrent.filename;
-        if (filename.endsWith(".torrent")) {
+        String filename = file.getName();
+        if (!filename.endsWith(".torrent")) {
             filename += ".torrent";
         }
         renderBinary(file, filename);
