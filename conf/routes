@@ -14,6 +14,7 @@ GET     /torrent/{torrentId}/update             Application.update
 POST    /torrent/save                           Application.save
 GET     /torrent/{torrentId}/details            Application.details
 GET     /torrent/{torrentId}/delete             Application.delete
+GET     /torrent/{torrentId}/download           Application.getTorrentFile
 
 # Users
 GET     /users                                  Users.index
