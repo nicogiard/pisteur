@@ -113,7 +113,6 @@ public class Torrent extends Model {
 
     public static long countNotTagged() {
         long count = JPA.em().createNativeQuery("SELECT COUNT(t.id) FROM Torrent t LEFT OUTER JOIN Torrent_Tag AS tt ON t.id = tt.torrent_id WHERE tt.torrent_id IS NULL").getFirstResult();
-        System.out.println(count);
         return count;
     }
 
