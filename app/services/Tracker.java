@@ -12,7 +12,9 @@ import utils.Constants;
 import utils.IPUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLDecoder;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -190,7 +192,7 @@ public class Tracker {
         return response;
     }
 
-    public void event() throws UnknownUserException {
+    public void event() throws UnknownUserException, UnknownHostException {
         String event = "none";
         if (announceParams.containsKey("event")) {
             event = announceParams.get("event");
@@ -206,7 +208,8 @@ public class Tracker {
                 seedings = 1;
             }
             if (peer == null) {
-                if (User.isActive(announceParams.get("ip"))) {
+            	InetAddress address = InetAddress.getByName(announceParams.get("ip"));
+                if (User.isActive(address.getHostAddress()) || User.isActive(address.getHostName())) {
                     new_peer();
                 } else {
                     Logger.debug("Tracker|event : utilisateur(ip: %s) non autorisé", announceParams.get("ip"));

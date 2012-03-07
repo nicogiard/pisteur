@@ -9,6 +9,7 @@ import utils.Constants;
 import utils.Utils;
 
 import java.io.UnsupportedEncodingException;
+import java.net.UnknownHostException;
 
 public class Announce extends Controller {
 
@@ -43,6 +44,9 @@ public class Announce extends Controller {
             reponse = Tracker.error(e.getMessage());
         } catch (UnknownUserException e) {
         	Logger.warn("Announce|index : An error occured : %s", e.getMessage());
+            reponse = Tracker.error(e.getMessage());
+		} catch (UnknownHostException e) {
+			Logger.error("Announce|index : An error occured : %s", e.getMessage());
             reponse = Tracker.error(e.getMessage());
 		}
         renderText(reponse);

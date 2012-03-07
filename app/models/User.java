@@ -34,6 +34,8 @@ public class User extends Model {
     public boolean isAdmin = false;
     
     public boolean isActive = false;
+    
+    
 
     public boolean checkPassword(String password) {
         return this.password.equals(Codec.hexSHA1(password));
