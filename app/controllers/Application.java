@@ -11,6 +11,7 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.With;
 
 import java.io.File;
@@ -54,11 +55,18 @@ public class Application extends Controller {
         renderTemplate("Application/index.html", pager, torrents, activeTag);
     }
 
+    public static void noTag() {
+        TORRENTS_PAGER.setElementCount(Torrent.countNotTagged());
+        List<Torrent> torrents = Torrent.findNotTagged(TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
+        Pager pager = TORRENTS_PAGER;
+        renderTemplate("Application/index.html", torrents, pager);
+    }
+
     public static void search(String keywords) {
         TORRENTS_PAGER.setElementCount(Torrent.countSearch(keywords));
         List<Torrent> torrents = Torrent.search(keywords, (TORRENTS_PAGER.getPage() - 1) * TORRENTS_PAGER.getPageSize(), TORRENTS_PAGER.getPageSize());
         Pager pager = TORRENTS_PAGER;
-        renderTemplate("Application/index.html", pager, keywords, torrents, keywords);
+        renderTemplate("Application/index.html", pager, keywords, torrents);
     }
 
     public static void create() {
@@ -105,6 +113,26 @@ public class Application extends Controller {
         index();
     }
 
+    public static String uploadMultiple(File file) {
+        Http.Response response = Http.Response.current();
+        response.setHeader("Server", "Web Server");
+        response.setHeader("Expires", "Mon, 26 Jul 1997 05:00:00 GMT");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+
+        Torrent torrent = new Torrent();
+        try {
+            torrent.uploader = Security.connectedUser();
+            torrent.creationDate = new Date();
+            torrent.setFile(file);
+            torrent.filename = file.getName();
+        } catch (FileNotFoundException e) {
+            return "{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 101, \"message\": \"Failed to open input stream.\"}, \"id\" : \"id\"}";
+        }
+        torrent.save();
+
+        return "{\"jsonrpc\" : \"2.0\", \"result\" : null, \"id\" : \"id\"}";
+    }
 
     public static void delete(Long torrentId) {
         Torrent torrent = Torrent.findById(torrentId);
@@ -125,7 +153,11 @@ public class Application extends Controller {
         notFoundIfNull(torrent);
         notFoundIfNull(torrent.getFile());
         File file = torrent.getFile();
-        renderBinary(file, torrent.filename);
+        String filename = torrent.filename;
+        if (!filename.endsWith(".torrent")) {
+            filename += ".torrent";
+        }
+        renderBinary(file, filename);
     }
 
     private static List<Tag> extractTags(String tags) {

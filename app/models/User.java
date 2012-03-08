@@ -59,6 +59,7 @@ public class User extends Model {
     	}
     }
     
+<<<<<<< HEAD
     public void setIpAddress(String ipAddress){
     	if(!Strings.isNullOrEmpty(ipAddress)){
     		this.ipAddress = ipAddress.toLowerCase();
@@ -67,5 +68,9 @@ public class User extends Model {
     
     public static boolean isActive(String ipAdress){
     	return User.count("ipAddress LIKE ? AND isActive = true", ipAdress) > 0;
+=======
+    public static boolean isActive(String ipAddress){
+    	return User.count("ipAddress LIKE ? AND isActive = true", ipAddress) > 0;
+>>>>>>> 1fb861aae52ef99c4162183425fe7906ad6aa714
     }
 }
