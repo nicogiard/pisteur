@@ -54,16 +54,23 @@ public class Users extends Controller {
         renderTemplate("Users/update.html", ipAddress);
     }
 
-    @Check("isAdmin")
     public static void update(Long userId) {
         User user = User.findById(userId);
         notFoundIfNull(user);
+
+        if(!Security.connectedUser().isAdmin && Security.connectedUser().id != user.id) {
+            forbidden();
+        }
+
         String ipAddress = IPUtils.getIpFromRequest(request);
         render(user, ipAddress);
     }
 
-    @Check("isAdmin")
     public static void save(@Required @Valid User user) {
+        if(!Security.connectedUser().isAdmin && Security.connectedUser().id != user.id) {
+            forbidden();
+        }
+
         if (validation.hasErrors()) {
             flash.error("Veuillez corriger les erreurs");
             params.flash();
