@@ -31,10 +31,9 @@
             <th>Identifiant</th>
             <th>Email</th>
             <th>Adresse IP</th>
-            #{if controllers.Security.connectedUser().isAdmin}
-                <th>Actif</th>
-                <th>Actions</th>
-            #{/if}
+            <th>Client</th>
+            <th>Actif</th>
+            <th>Actions</th>
         </tr>
     #{list users, as:'user'}
         <tr>
@@ -43,16 +42,28 @@
             <td><a href="@{Users.details(user.id)}">${user.username}</a></td>
             <td><a href="mailto:${user.email}">${user.email}</a></td>
             <td>${user.ipAddress}</td>
-            #{if controllers.Security.connectedUser().isAdmin}
+            <td>${user.clientName}</td>
+            #{if controllers.Security.connectedUser().isAdmin || controllers.Security.connectedUser() == user}
                 <td>
                     <a href="@{Users.activate(user.id)}"><span class="label label-success ${user.isActive ? '' : 'opacity50'}" >Actif</span></a>
                     <a href="@{Users.activate(user.id)}"><span class="label label-important ${user.isActive ? 'opacity50' : ''}">Non actif</span></a>
                 </td>
                 <td class="actions">
                     <a href="@{Users.update(user.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>&nbsp;Modifier</a>
+                    #{if controllers.Security.connectedUser().isAdmin}
                     <a href="@{Users.delete(user.id)}" class="btn btn-danger" onclick="if(!confirm('Etes vous sûr de vouloir supprimer cet utilisateur (ainsi que tous ses torrents) ?'))return false;" title="Supprimer"><i class="icon-trash icon-white"></i>Supprimer</a>
+                    #{/if}
                 </td>
             #{/if}
+            #{else}
+                <td>
+                    <span class="label label-success ${user.isActive ? '' : 'opacity50'}" >Actif</span>
+                    <span class="label label-important ${user.isActive ? 'opacity50' : ''}">Non actif</span>
+                </td>
+                <td>
+                    &nbsp;
+                </td>
+            #{/else}
         </tr>
     #{/list}
     </table>

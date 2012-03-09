@@ -28,6 +28,9 @@ GET     /user/{userId}/delete                   Users.delete
 # Tracker
 GET     /announce                               Announce.index
 
+# Feeds
+GET     /feeds/rss                              Feeds.rss
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

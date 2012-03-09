@@ -41,7 +41,7 @@ public class Application extends Controller {
 
     public static void index() {
         TORRENTS_PAGER.setElementCount(Torrent.count());
-        List<Torrent> torrents = Torrent.find("").fetch(TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
+        List<Torrent> torrents = Torrent.find("ORDER BY creationDate DESC").fetch(TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
         Pager pager = TORRENTS_PAGER;
         render(torrents, pager);
     }

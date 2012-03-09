@@ -73,11 +73,11 @@ public class Tracker {
                 Logger.debug("Tracker|getParams : %s : %s", key, value);
             }
         }
-        if (!announceParams.containsKey("ip")) {
-            String ipAddress = IPUtils.getIpFromRequest(request);
-            Logger.debug("Tracker|getParams : ip : %s", ipAddress);
-            announceParams.put("ip", ipAddress);
-        }
+
+        String ipAddress = IPUtils.getIpFromRequest(request);
+        Logger.debug("Tracker|getParams : ip : %s", ipAddress);
+        announceParams.put("ip", ipAddress);
+
         return announceParams;
     }
 
@@ -209,7 +209,7 @@ public class Tracker {
             }
             if (peer == null) {
                 // Gestion du cas ou l'utilisateur a saisi un hostname DNS ou une IP dans son profil
-            	InetAddress address = InetAddress.getByName(announceParams.get("ip"));
+                InetAddress address = InetAddress.getByName(announceParams.get("ip"));
                 if (User.isActive(address.getHostAddress()) || User.isActive(address.getHostName())) {
                     new_peer();
                 } else {

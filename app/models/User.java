@@ -30,6 +30,8 @@ public class User extends Model {
 
     @Required
     public String ipAddress;
+
+    public String clientName;
     
     public boolean isAdmin = false;
     

@@ -23,7 +23,9 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Utilisateurs<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li #{if request.action =~ "Users.index"}class="active"#{/if}><a href="@{Users.index}"><i class="icon-user"></i>&nbsp;Tous</a></li>
+                        #{if controllers.Security.connectedUser().isAdmin}
                         <li #{if request.action =~ "Users.create"}class="active"#{/if}><a href="@{Users.create}"><i class="icon-user"></i>&nbsp;Nouveau</a></li>
+                        #{/if}
                     </ul>
                 </li>
             </ul>

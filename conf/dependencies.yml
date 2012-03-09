@@ -5,3 +5,5 @@ require:
     - secure
     - play -> search 2.0
     - com.google.guava -> guava 11.0.1
+    - org.jsoup -> jsoup 1.6.1
+    - rome 1.0
