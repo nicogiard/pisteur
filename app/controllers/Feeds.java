@@ -1,5 +1,6 @@
 package controllers;
 
+import com.google.common.collect.Maps;
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
@@ -8,12 +9,14 @@ import play.Logger;
 import play.Play;
 import play.i18n.Messages;
 import play.mvc.Controller;
+import play.mvc.Router;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Feeds extends Controller {
 
@@ -42,7 +45,7 @@ public class Feeds extends Controller {
         feed.setAuthor("pisteur");
         feed.setCopyright("©2012 all rights reserved");
         feed.setDescription("RSS feed for all new torrents");
-        feed.setLink(Play.configuration.get("application.baseUrl") + "/feeds/rss");
+        feed.setLink(Router.getFullUrl("Feeds.rss"));
         feed.setPublishedDate(new Date());
 
         List<Torrent> torrents = Torrent.find("").fetch(15);
@@ -61,7 +64,9 @@ public class Feeds extends Controller {
                 content.setValue(torrent.description);
             }
             item.setDescription(content);
-            item.setLink(Play.configuration.get("application.baseUrl") + "");
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("torrentId", torrent.id);
+            item.setLink(Router.getFullUrl("Application.getTorrentFile", params));
             entries.add(item);
         }
         feed.setEntries(entries);
