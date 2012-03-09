@@ -26,7 +26,7 @@ $(document).ready(function() {
     <div class="control-group #{ifError 'user.password'}error#{/ifError}">
         <label class="control-label">Mot de passe</label>
         <div class="controls">
-            <input type="text" autocomplete="off" #{if user?.id != null}readonly="readonly"#{/if} name="user.password" value="${flash.get('user.password') != null ? flash.get('user.password') : (user?.id != null) ? user?.password : null}">
+            <input type="password" autocomplete="off" #{if user?.id != null}readonly="readonly"#{/if} name="user.password" value="${flash.get('user.password') != null ? flash.get('user.password') : (user?.id != null) ? user?.password : null}">
         #{ifError 'user.password'}<span class="help-inline">#{error 'user.password' /}</span>#{/ifError}
         #{else }<span class="help-inline">&{'validation.required'}</span>#{/else}
         </div>
