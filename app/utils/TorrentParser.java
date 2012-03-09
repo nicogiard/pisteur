@@ -34,8 +34,17 @@ public final class TorrentParser {
     private String encoding;
     private String saveAs;
     private int pieceLength;
+    private String infosHash;
 
-    /* In case of multiple files torrent, saveAs is the name of a directory
+    public String getInfosHash() {
+		return infosHash;
+	}
+
+	public void setInfosHash(String infosHash) {
+		this.infosHash = infosHash;
+	}
+
+	/* In case of multiple files torrent, saveAs is the name of a directory
      * and name contains the path of the file to be saved in this directory
      */
     private ArrayList name = new ArrayList();
@@ -167,7 +176,8 @@ public final class TorrentParser {
 	        //Store the info field data
 	        if(metaInfo.containsKey("info")){
 	            Map info = (Map) metaInfo.get("info");	            	
-	            	//TODO hash du champ info	           
+	            //TODO hash du dictionnaire info
+	            this.infosHash = Utils.byteArrayToByteString(Utils.hash(BEncode.encode(info).getBytes()));
 	            if (info.containsKey("name")){
 	                this.saveAs = new String((byte[]) info.get("name"));
 	            }
@@ -320,7 +330,8 @@ public final class TorrentParser {
 			System.out.println("pieceLength : " + parser.pieceLength);
 			System.out.println("saveAs : " + parser.saveAs);
 			System.out.println("total_length : " + parser.total_length);
-			System.out.println("name : " + parser.name);			
+			System.out.println("name : " + parser.name);
+			System.out.println("infoHash : " + parser.infosHash);
 		} catch (TorrentParserException e) {
 			e.printStackTrace();
 		}
