@@ -49,6 +49,7 @@ $(document).ready(function() {
             <th style="width: 30%;">Torrent</th>
             <th>Uploader</th>
             <th>Tags</th>
+            <th>Date d'ajout</th>
             <th style="width: 220px;">Actions</th>
         </tr>
     #{list torrents, as:'torrent'}
@@ -62,6 +63,9 @@ $(document).ready(function() {
                 #{list torrent.tags, as:'tag'}
                     <a href="@{Application.tag(tag.name)}" class="tag"><i class="icon-tag"></i>${tag.name}</a>${tag_isLast ? '' : ',' }
                 #{/list}
+            </td>
+            <td>
+                ${torrent.creationDate?.format("dd/MM/yyyy")}
             </td>
             <td class="actions">
                 <a href="@{Application.update(torrent.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>Modifier</a>

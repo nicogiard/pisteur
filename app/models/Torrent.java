@@ -109,7 +109,7 @@ public class Torrent extends Model {
     }
 
     public static List<Torrent> findTaggedWith(Tag tag, int page, int length) {
-        return Torrent.find("SELECT t FROM Torrent t JOIN t.tags AS tag WHERE tag.name=?", tag.name).fetch(page, length);
+        return Torrent.find("SELECT t FROM Torrent t JOIN t.tags AS tag WHERE tag.name=? ORDER BY creationDate DESC", tag.name).fetch(page, length);
     }
 
     public static long countTaggedWith(Tag tag) {
@@ -122,7 +122,7 @@ public class Torrent extends Model {
             pageLimit = 1;
         }
         int startLimit = (pageLimit - 1) * length;
-        return (List<Torrent>) JPA.em().createNativeQuery("SELECT t.id, t.filename, t.description, t.file, t.uploader_id, t.creationDate, t.modificationDate, t.info_hash FROM Torrent t LEFT OUTER JOIN Torrent_Tag AS tt ON t.id = tt.torrent_id WHERE tt.torrent_id IS NULL LIMIT ? , ?", Torrent.class).setParameter(1, startLimit).setParameter(2, length).getResultList();
+        return (List<Torrent>) JPA.em().createNativeQuery("SELECT t.id, t.filename, t.description, t.file, t.uploader_id, t.creationDate, t.modificationDate, t.info_hash, t.totalSize FROM Torrent t LEFT OUTER JOIN Torrent_Tag AS tt ON t.id = tt.torrent_id WHERE tt.torrent_id IS NULL ORDER BY t.creationDate DESC LIMIT ? , ?", Torrent.class).setParameter(1, startLimit).setParameter(2, length).getResultList();
     }
 
     public static long countNotTagged() {
