@@ -69,6 +69,8 @@ Torrent(file1):
     - tagFilm
     - tagScienceFiction
   uploader: nicogiard
+  creationDate: 2012-03-10
+  modificationDate: 2012-03-11
 
 Torrent(file2):
   filename: Battlestar Gallactica - Saison 1
@@ -76,6 +78,7 @@ Torrent(file2):
     - tagSerie
     - tagScienceFiction
   uploader: nicogiard
+  creationDate: 2012-03-09
 
 Torrent(file3):
   filename: Game of Thrones - episode 1x1
@@ -83,6 +86,7 @@ Torrent(file3):
     - tagSerie
     - tagMedieval
   uploader: miumius
+  creationDate: 2012-03-08
 
 Torrent(totoro):
   filename: totoro
@@ -90,6 +94,8 @@ Torrent(totoro):
   tags:
     - tagAnimation
   uploader: miumius
+  creationDate: 2012-03-10
+  modificationDate: 2012-03-10
 
 Torrent(chihiro):
   filename: le_voyage_de_chihiro

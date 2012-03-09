@@ -6,7 +6,6 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
 import models.Torrent;
 import play.Logger;
-import play.Play;
 import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Router;
@@ -48,12 +47,12 @@ public class Feeds extends Controller {
         feed.setLink(Router.getFullUrl("Feeds.rss"));
         feed.setPublishedDate(new Date());
 
-        List<Torrent> torrents = Torrent.find("").fetch(15);
+        List<Torrent> torrents = Torrent.find("ORDER BY creationDate DESC").fetch(15);
         List entries = new ArrayList();
         for (Torrent torrent : torrents) {
             SyndEntry item = new SyndEntryImpl();
-            if (torrent.modificationDate != null) {
-                item.setPublishedDate(torrent.modificationDate);
+            if (torrent.creationDate != null) {
+                item.setPublishedDate(torrent.creationDate);
             }
             if (torrent.filename != null) {
                 item.setTitle(torrent.filename);
