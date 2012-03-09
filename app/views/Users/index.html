@@ -31,6 +31,7 @@
             <th>Identifiant</th>
             <th>Email</th>
             <th>Adresse IP</th>
+            <th>Client</th>
             #{if controllers.Security.connectedUser().isAdmin}
                 <th>Actif</th>
                 <th>Actions</th>
@@ -43,6 +44,7 @@
             <td><a href="@{Users.details(user.id)}">${user.username}</a></td>
             <td><a href="mailto:${user.email}">${user.email}</a></td>
             <td>${user.ipAddress}</td>
+            <td>${user.clientName}</td>
             #{if controllers.Security.connectedUser().isAdmin}
                 <td>
                     <a href="@{Users.activate(user.id)}"><span class="label label-success ${user.isActive ? '' : 'opacity50'}" >Actif</span></a>

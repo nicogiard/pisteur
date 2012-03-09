@@ -65,6 +65,13 @@
         <br />Votre adress ip actuelle : <a href="#!" id="myIpAddress" title="Cliquer pour utiliser cette adresse ip" data-ipadress="${ipAddress}">${ipAddress}</a>
         </div>
     </div>
+    <div class="control-group #{ifError 'user.clientName'}error#{/ifError}">
+        <label class="control-label">Client</label>
+        <div class="controls">
+            <input type="text" name="user.clientName" value="${flash.get('user.clientName') != null ? flash.get('user.clientName') : user?.clientName}">
+        #{ifError 'user.clientName'}<span class="help-inline">#{error 'user.clientName' /}</span>#{/ifError}
+        </div>
+    </div>
     <div class="control-group">
         <label class="control-label">Administrateur</label>
         <div class="controls">
