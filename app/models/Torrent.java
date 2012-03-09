@@ -27,6 +27,7 @@ import javax.persistence.OneToOne;
 import java.io.*;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -156,6 +157,7 @@ public class Torrent extends Model {
     	TorrentParser parser = new TorrentParser(torrentFile);
     	parser.parse();
     	this.totalSize = Utils.byteMultipleSize(parser.getTotal_length());
+    	this.info_hash = parser.getInfosHash().toLowerCase();
     }
     
 }
