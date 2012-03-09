@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,51 +22,128 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
+import exception.utils.TorrentParserException;
+
 public final class TorrentParser {
 	
 	
-	 public String announceURL;
-    public String comment;
-    public String createdBy;
-    public long creationDate;
-    public String encoding;
-    public String saveAs;
-    public int pieceLength;
+	private String announceURL;
+    private String comment;
+    private String createdBy;
+    private long creationDate;
+    private String encoding;
+    private String saveAs;
+    private int pieceLength;
 
     /* In case of multiple files torrent, saveAs is the name of a directory
      * and name contains the path of the file to be saved in this directory
      */
-    public ArrayList name = new ArrayList();
-    public ArrayList length = new ArrayList();
+    private ArrayList name = new ArrayList();
+    private ArrayList length = new ArrayList();
 
-    public byte[] info_hash_as_binary;
-    public String info_hash_as_hex;
-    public String info_hash_as_url;
-    public long total_length;
-
-    public ArrayList piece_hash_values_as_binary;
-    public ArrayList piece_hash_values_as_hex;
-    public ArrayList piece_hash_values_as_url;
+    private long total_length;
 	
+	public String getAnnounceURL() {
+		return announceURL;
+	}
+
+	public void setAnnounceURL(String announceURL) {
+		this.announceURL = announceURL;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public long getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(long creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public String getEncoding() {
+		return encoding;
+	}
+
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
+	}
+
+	public String getSaveAs() {
+		return saveAs;
+	}
+
+	public void setSaveAs(String saveAs) {
+		this.saveAs = saveAs;
+	}
+
+	public int getPieceLength() {
+		return pieceLength;
+	}
+
+	public void setPieceLength(int pieceLength) {
+		this.pieceLength = pieceLength;
+	}
+
+	public ArrayList getName() {
+		return name;
+	}
+
+	public void setName(ArrayList name) {
+		this.name = name;
+	}
+
+	public ArrayList getLength() {
+		return length;
+	}
+
+	public void setLength(ArrayList length) {
+		this.length = length;
+	}
+
+	public long getTotal_length() {
+		return total_length;
+	}
+
+	public void setTotal_length(long total_length) {
+		this.total_length = total_length;
+	}
+
 	private byte[] torrentBytes = null;
 	private int position = 0;
 	
-	public TorrentParser(File torrentFile) throws IOException{
+	public TorrentParser(File torrentFile) throws TorrentParserException{
 		InputStreamReader reader = null;
-		 StringBuilder sb = new StringBuilder();
 		try {
 			FileInputStream is = new FileInputStream(torrentFile);
 			this.torrentBytes = new byte[(int)torrentFile.length()]; 
 			is.read(torrentBytes);
-		    
-		} finally {
-		    // Always close resources in finally!
+		} catch (FileNotFoundException e) {
+			throw new TorrentParserException("File not found");
+		} catch (IOException e) {
+			throw new TorrentParserException("unable to read the torrent file");
+		} 
+		finally {		    
 		    if (reader != null) try { reader.close(); } catch (IOException ignore) {}
 		}
 	}
 	
-	public void parse(){
-		if(torrentBytes != null){
+	public void parse() throws TorrentParserException{
+		if(torrentBytes != null && torrentBytes.length > 0){
 			position = 0;
 
 			Map metaInfo = (HashMap<String, Object>)this.bdecode();
@@ -131,8 +209,8 @@ public final class TorrentParser {
 		}
 	}
 	
-	 private Object bdecode(){
-		 char currentChar = (char)torrentBytes[position];		 
+	 private Object bdecode() throws TorrentParserException{
+		 char currentChar = (char)torrentBytes[position];
 		 if(currentChar == 'i'){
 			 position ++;
 			 return this.decodeInteger();
@@ -153,7 +231,7 @@ public final class TorrentParser {
 		 }
 	 }
 	
-	private Map<String, Object> decodeDictionary(){
+	private Map<String, Object> decodeDictionary() throws TorrentParserException{
 		HashMap<String, Object> dictionary = Maps.newHashMap();
         while (position <= torrentBytes.length) {        	
         	char currentChar = (char)torrentBytes[position];
@@ -168,58 +246,71 @@ public final class TorrentParser {
         return dictionary;		
 	}
 	
-	private List decodeList(){
+	private List decodeList() throws TorrentParserException{
 		ArrayList<Object> liste = Lists.newArrayList();
 		
-        while ((char)torrentBytes[position] != 'e') {
+        while ((char)torrentBytes[position] != 'e' && position < torrentBytes.length) {
             liste.add(this.bdecode());
         }
         position ++;
         return liste;
 	}
 	
-	private byte[] decodeString(){		
-		int colonPosition = position;
-		while(colonPosition < torrentBytes.length && (char)torrentBytes[colonPosition] != ':'){
-			colonPosition ++;
+	private byte[] decodeString() throws TorrentParserException{
+		 StringBuilder sb = new StringBuilder();
+		try{
+			int colonPosition = position;
+			while((colonPosition < torrentBytes.length && (char)torrentBytes[colonPosition] != ':')){
+				colonPosition ++;
+			}	       
+	        for(int i=position; i < colonPosition; i++){
+	        	sb.append((char)torrentBytes[i]);
+	        }
+	        
+	        int length = Integer.parseInt(sb.toString());
+	        	        
+	        if (length == 0) {
+	        	this.position = colonPosition + length + 1;
+	            return null;
+	        } else {
+	        	this.position = colonPosition + length + 1;
+	
+	    		byte[] tempArray = new byte[length];
+	    		int tempArrayIndex = 0;
+	        	for(int i=colonPosition + 1; i < colonPosition + 1 + length; i++){
+	            	tempArray[tempArrayIndex++] = torrentBytes[i];
+	            }
+	        	return tempArray;
+	        }
 		}
-        StringBuilder sb = new StringBuilder();
-        for(int i=position; i < colonPosition; i++){
-        	sb.append((char)torrentBytes[i]);
-        }
-        int length = Integer.parseInt(sb.toString());
-        if (length == 0) {
-        	this.position = colonPosition + length + 1;
-            return null;
-        } else {
-        	this.position = colonPosition + length + 1;
-
-    		byte[] tempArray = new byte[length];
-    		int tempArrayIndex = 0;
-        	for(int i=colonPosition + 1; i < colonPosition + 1 + length; i++){
-            	tempArray[tempArrayIndex++] = torrentBytes[i];
-            }
-        	return tempArray;
-        }
+        catch (NumberFormatException e) {
+			throw new TorrentParserException("bad length ("+ sb.toString() +") for string at position : " + position );
+		}
 	}
 	
-	private Long decodeInteger(){
-		int ePosition = position;
-		while(ePosition < torrentBytes.length && (char)torrentBytes[ePosition] != 'e'){
-			ePosition ++;
-		}
+	private Long decodeInteger() throws TorrentParserException{
 		StringBuilder sb = new StringBuilder();
-		for(int i=position; i < ePosition; i++){
-        	sb.append((char)torrentBytes[i]);
-        }
-        long valeur = Long.parseLong(sb.toString());
-        position = ePosition + 1;
-        return valeur;
+		int ePosition = position;
+		try{
+			while(ePosition < torrentBytes.length && (char)torrentBytes[ePosition] != 'e'){
+				ePosition ++;
+			}
+			
+			for(int i=position; i < ePosition; i++){
+	        	sb.append((char)torrentBytes[i]);
+	        }
+	        long valeur = Long.parseLong(sb.toString());
+	        position = ePosition + 1;
+	        return valeur;
+		}
+		catch(NumberFormatException e){
+			throw new TorrentParserException("Wrong value for integer ("+ sb.toString() +") at position : " + position );
+		}
 	}
 	
 	public static void main(String args[]){
 		try {
-			TorrentParser parser = new TorrentParser(new File("./test/GroovyinActionSecondEdition.pdf.torrent"));
+			TorrentParser parser = new TorrentParser(new File("./test/saison_1.torrent"));
 			parser.parse();
 			System.out.println("announce url : " + parser.announceURL);
 			System.out.println("comment : " + parser.comment);
@@ -230,8 +321,7 @@ public final class TorrentParser {
 			System.out.println("saveAs : " + parser.saveAs);
 			System.out.println("total_length : " + parser.total_length);
 			System.out.println("name : " + parser.name);			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (TorrentParserException e) {
 			e.printStackTrace();
 		}
 	}

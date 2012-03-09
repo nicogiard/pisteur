@@ -46,6 +46,10 @@ import java.security.*;
  */
 public class Utils {
 
+	private static final long TERAOCTET = (long) Math.pow(10, 12);  
+	private static final long GIGAOCTET = (long) Math.pow(10, 9);
+	private static final long MEGAOCTET = (long) Math.pow(10, 6);
+	private static final long KILOOCTET = (long) Math.pow(10, 3);
     /*
      * Convert a byte array into a URL encoded String
      */
@@ -130,7 +134,33 @@ public class Utils {
 
         return rslt;
     }
+    
+    public static String byteMultipleSize(long size){
+    	Double taille;
 
+    	if (size >= Utils.TERAOCTET) {
+    		taille = (double)size/Utils.TERAOCTET;
+    		return (taille > 1 ? taille.toString().substring(0, 3) + "To" : taille.toString().substring(0, 1) + "To");
+    	}
+
+    	if(size >= Utils.GIGAOCTET){
+    		taille = (double)size/Utils.GIGAOCTET;
+    		return (taille > 1 ? taille.toString().substring(0, 3) + "Go" : taille.toString().substring(0, 1) + "Go");
+    	}
+    	
+    	if(size >= Utils.MEGAOCTET ){
+    		taille = (double)size/Utils.MEGAOCTET;
+    		return (taille > 1 ? taille.toString().substring(0, 3) + "Mo" : taille.toString().substring(0, 1) + "Mo");
+    	}
+    	//si inferieur a 1Go
+    	if(size >= Utils.KILOOCTET){
+    		taille = (double)size/Utils.KILOOCTET ;
+    		return (taille > 1 ? taille.toString().substring(0, 3) + "Ko" : taille.toString().substring(0, 1) + "Ko");
+    	}
+    	return size + "Octets";
+    	
+    }
+    
     /**
      * Compute the SHA1 hash of the array in parameter
      *

@@ -2,6 +2,9 @@ package models;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+
+import exception.utils.TorrentParserException;
+
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.engine.jdbc.LobCreator;
@@ -14,6 +17,8 @@ import play.modules.search.Field;
 import play.modules.search.Indexed;
 import play.modules.search.Query;
 import play.modules.search.Search;
+import utils.TorrentParser;
+import utils.Utils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,6 +57,8 @@ public class Torrent extends Model {
     public Date modificationDate;
 
     public String info_hash;
+    
+    public String totalSize;
 
     public File getFile() {
         if (file != null) {
@@ -67,6 +74,7 @@ public class Torrent extends Model {
                 }
                 is.close();
                 os.close();
+                
                 // TODO : faudrait gérer un peu mieux les exceptions ici
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -81,7 +89,13 @@ public class Torrent extends Model {
     }
 
     public void setFile(File file) throws FileNotFoundException {
-        this.file = getBlob(file);
+    	try {
+    		this.file = getBlob(file);
+			this.getInfoFromTorrentFile(file);
+		} catch (TorrentParserException e) {
+			e.printStackTrace();
+		}
+        
     }
 
     public void deleteFile() {
@@ -137,4 +151,11 @@ public class Torrent extends Model {
         }
         return count;
     }
+    
+    private void getInfoFromTorrentFile(File torrentFile) throws TorrentParserException{
+    	TorrentParser parser = new TorrentParser(torrentFile);
+    	parser.parse();
+    	this.totalSize = Utils.byteMultipleSize(parser.getTotal_length());
+    }
+    
 }
