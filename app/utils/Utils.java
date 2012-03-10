@@ -46,10 +46,10 @@ import java.security.*;
  */
 public class Utils {
 
-	private static final long TERAOCTET = (long) Math.pow(10, 12);  
-	private static final long GIGAOCTET = (long) Math.pow(10, 9);
-	private static final long MEGAOCTET = (long) Math.pow(10, 6);
-	private static final long KILOOCTET = (long) Math.pow(10, 3);
+	private static final long TERAOCTET = (long) Math.pow(2, 40);  
+	private static final long GIGAOCTET = (long) Math.pow(2, 30);
+	private static final long MEGAOCTET = (long) Math.pow(2, 20);
+	private static final long KILOOCTET = (long) Math.pow(2, 10);
     /*
      * Convert a byte array into a URL encoded String
      */
@@ -136,26 +136,48 @@ public class Utils {
     }
     
     public static String byteMultipleSize(long size){
-    	Double taille;
+    	long taille;
+    	long reste;
+    	String decime;
 
     	if (size >= Utils.TERAOCTET) {
-    		taille = (double)size/Utils.TERAOCTET;
-    		return (taille > 1 ? taille.toString().substring(0, 3) + "To" : taille.toString().substring(0, 1) + "To");
+    		taille = (long)Math.floor(size/Utils.TERAOCTET);
+    		reste = size%Utils.TERAOCTET;
+    		if(reste > 10 * Utils.GIGAOCTET){
+    			if(reste > 100 * Utils.GIGAOCTET){
+    				return taille + "," + Math.round(reste/(100*Utils.GIGAOCTET))+"To";
+    			}    			
+    			return taille + ",0" +  Math.round(reste/(10*Utils.GIGAOCTET))+"To";
+    		}
+    		return taille+"To";
     	}
 
     	if(size >= Utils.GIGAOCTET){
-    		taille = (double)size/Utils.GIGAOCTET;
-    		return (taille > 1 ? taille.toString().substring(0, 3) + "Go" : taille.toString().substring(0, 1) + "Go");
+    		taille = (long)Math.floor(size/Utils.GIGAOCTET);
+    		reste = size%Utils.GIGAOCTET;
+    		if(reste > 10 * Utils.MEGAOCTET){
+    			if(reste > 100 * Utils.MEGAOCTET){
+    				return taille + "," + Math.round(reste/(100*Utils.MEGAOCTET))+"Go";
+    			}    			
+    			return taille + ",0" +  Math.round(reste/(10*Utils.MEGAOCTET))+"Go";
+    		}
+    		return taille+"Go";
     	}
     	
     	if(size >= Utils.MEGAOCTET ){
-    		taille = (double)size/Utils.MEGAOCTET;
-    		return (taille > 1 ? taille.toString().substring(0, 3) + "Mo" : taille.toString().substring(0, 1) + "Mo");
+    		taille = (long)Math.floor(size/Utils.MEGAOCTET);
+    		reste = size%Utils.MEGAOCTET;
+    		if(reste >= 10 * Utils.KILOOCTET){
+    			if(reste >= 100 * Utils.KILOOCTET){
+    				return taille + "," + Math.round(reste/(100*Utils.KILOOCTET))+"Mo";
+    			}    			
+    			return taille + ",0" +  Math.round(reste/(10*Utils.KILOOCTET))+"Mo";
+    		}
+    		return taille+"Mo";
     	}
-    	//si inferieur a 1Go
     	if(size >= Utils.KILOOCTET){
-    		taille = (double)size/Utils.KILOOCTET ;
-    		return (taille > 1 ? taille.toString().substring(0, 3) + "Ko" : taille.toString().substring(0, 1) + "Ko");
+    		taille = (long)Math.floor(size/Utils.KILOOCTET);
+    		return taille+"Ko";
     	}
     	return size + "Octets";
     	
