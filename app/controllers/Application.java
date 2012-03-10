@@ -17,6 +17,8 @@ import utils.Twitter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +30,7 @@ public class Application extends Controller {
 
     @Before
     static void defaultData() {
-        List<Tag> tags = Tag.findAll();
+        List<Tag> tags = Tag.findOrderByMostUsed();
         renderArgs.put("tags", tags);
 
         // Récupération de la pagination
@@ -75,13 +77,13 @@ public class Application extends Controller {
         renderTemplate("Application/update.html");
     }
 
-    public static void update(Long torrentId, String keywords) {
+    public static void update(Long torrentId, String keywords, String activeTag) {
         Torrent torrent = Torrent.findById(torrentId);
         notFoundIfNull(torrent);
-        render(torrent, keywords);
+        render(torrent, keywords, activeTag);
     }
 
-    public static void save(@Required @Valid Torrent torrent, File file, String tags, String keywords) {
+    public static void save(@Required @Valid Torrent torrent, File file, String tags, String keywords, String activeTag) {
         if (torrent.id == null) {
             validation.required(file);
         }
@@ -96,7 +98,7 @@ public class Application extends Controller {
             if (torrent.id == null) {
                 create();
             }
-            update(torrent.id, keywords);
+            update(torrent.id, keywords, activeTag);
         }
 
         if (torrent.id == null) {
@@ -127,7 +129,17 @@ public class Application extends Controller {
             }
         }
         if (!StringUtils.isBlank(keywords)) {
-            search(keywords);
+            try {
+                search(URLEncoder.encode(keywords, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                Logger.error(e.getMessage(), e);
+            }
+        } else if (!StringUtils.isBlank(activeTag)) {
+            try {
+                tag(URLEncoder.encode(activeTag, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                Logger.error(e.getMessage(), e);
+            }
         } else {
             index();
         }

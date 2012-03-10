@@ -21,15 +21,13 @@ $(document).ready(function() {
 
 <h1 class="screen-title"><i class="big-icon-page"></i>&nbsp;Torrents</h1>
 
-<div class="subnav">
-    <ul class="nav nav-pills">
-        <li #{if request.action != "Application.noTag" && !activeTag && !keywords}class="active"#{/if}><a href="@{Application.index}">Tous</a></li>
-        <li #{if request.action =~ "Application.noTag"}class="active"#{/if}><a href="@{Application.noTag}">Pas de Tag</a></li>
-    #{list tags, as:'tag'}
-        <li #{if activeTag && activeTag.name == tag.name}class="active"#{/if}><a href="@{Application.tag(tag.name)}">${tag.name}</a></li>
-    #{/list}
-    </ul>
-</div>
+<ul class="tagCloud">
+    <li><a href="@{Application.index}" class="btn #{if request.action != "Application.noTag" && !activeTag && !keywords}active#{/if}">Tous</a></li>
+    <li><a href="@{Application.noTag}" class="btn #{if request.action =~ "Application.noTag"}active#{/if}">Pas de Tag</a></li>
+#{list tags, as:'tag'}
+    <li><a href="@{Application.tag(tag.name)}" class="btn #{if activeTag && activeTag.name == tag.name}active#{/if}">${tag.name}</a></li>
+#{/list}
+</ul>
 
 <div class="container">
 #{form @Application.search(), class:"form-search pull-left", style:"margin: 18px 0;"}
@@ -69,7 +67,7 @@ $(document).ready(function() {
                 ${torrent.creationDate?.format("dd/MM/yyyy")}
             </td>
             <td class="actions">
-                <a href="@{Application.update(torrent.id)}#{if keywords}?keywords=${keywords}#{/if}" class="btn" title="Modifier"><i class="icon-pencil"></i>Modifier</a>
+                <a href="@{Application.update(torrent.id)}#{if keywords}?keywords=${keywords}#{/if}#{if activeTag}?activeTag=${activeTag.name}#{/if}" class="btn" title="Modifier"><i class="icon-pencil"></i>Modifier</a>
                 #{if controllers.Security.connectedUser() == torrent.uploader || controllers.Security.connectedUser().isAdmin}
                 <a href="@{Application.delete(torrent.id)}" class="btn btn-danger" onclick="if(!confirm('Etes vous sûr de vouloir supprimer ce torrent ?'))return false;" title="Supprimer"><i class="icon-trash icon-white"></i>Supprimer</a>
                 #{/if}
