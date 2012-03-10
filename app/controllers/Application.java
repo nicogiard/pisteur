@@ -111,14 +111,21 @@ public class Application extends Controller {
             torrent.modificationDate = new Date();
         }
         torrent.tags = extractTags(tags);
-        torrent.save();
 
-        try {
-            Twitter.init().setStatus("New : " + torrent.filename + " - http://bit.ly/xWYR4A");
-        } catch (Exception e) {
-            Logger.error(e.getMessage(), e);
+        boolean tweetIt = false;
+        if (torrent.id == null) {
+            tweetIt = true;
         }
 
+        torrent.save();
+
+        if (tweetIt) {
+            try {
+                Twitter.init().setStatus("New : " + torrent.filename + " - http://bit.ly/xWYR4A");
+            } catch (Exception e) {
+                Logger.error(e.getMessage(), e);
+            }
+        }
         if (!StringUtils.isBlank(keywords)) {
             search(keywords);
         } else {
