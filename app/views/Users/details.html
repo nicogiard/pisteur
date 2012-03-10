@@ -23,6 +23,7 @@ $('.btn-detail').live("click", function(e) {
 #{alerts /}
 
 #{if torrents?.size() > 0}
+    <p><strong>${pager.elementCount} torrent#{if pager.elementCount > 1}s#{/if}</strong></p>
     <table id="resultTable" class="table table-striped table-bordered table-condensed clear-pull">
         <tr>
             <th style="width: 30%;">Torrent</th>
