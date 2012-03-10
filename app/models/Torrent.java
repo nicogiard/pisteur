@@ -8,6 +8,7 @@ import exception.utils.TorrentParserException;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.engine.jdbc.LobCreator;
+import play.Logger;
 import play.Play;
 import play.data.binding.As;
 import play.data.validation.Required;
@@ -127,7 +128,8 @@ public class Torrent extends Model {
     }
 
     public static long countNotTagged() {
-        long count = JPA.em().createNativeQuery("SELECT COUNT(t.id) FROM Torrent t LEFT OUTER JOIN Torrent_Tag AS tt ON t.id = tt.torrent_id WHERE tt.torrent_id IS NULL").getFirstResult();
+        Long count = Long.parseLong(JPA.em().createNativeQuery("SELECT COUNT(t.id) FROM Torrent t LEFT OUTER JOIN Torrent_Tag AS tt ON t.id = tt.torrent_id WHERE tt.torrent_id IS NULL").getSingleResult().toString());
+        Logger.debug("Torrent|countNotTagged : count = %s", count);
         return count;
     }
 
