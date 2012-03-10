@@ -2,7 +2,7 @@
 #{set title:'Torrents' /}
 
 #{set 'moreScripts'}
-<script type="text/javascript">
+<script type="text/javascript" xmlns="http://www.w3.org/1999/html">
 $(document).ready(function() {
     $('#detailsModal').modal('hide');
 
@@ -44,6 +44,7 @@ $(document).ready(function() {
 #{alerts /}
 
 #{if torrents?.size() > 0}
+    <p><strong>${pager.elementCount} torrent#{if pager.elementCount > 1}s#{/if}</strong></p>
     <table id="resultTable" class="table table-striped table-bordered table-condensed clear-pull">
         <tr>
             <th style="width: 30%;">Torrent</th>
