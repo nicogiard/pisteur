@@ -7,3 +7,4 @@ require:
     - com.google.guava -> guava 11.0.1
     - org.jsoup -> jsoup 1.6.1
     - rome 1.0
+    - org.markdownj -> markdownj 0.3.0-1.0.2b4

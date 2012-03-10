@@ -9,7 +9,7 @@
     </div>
     <div class="control-group">
         <label class="control-label">Description :</label>
-        <span>${!torrent.description ? "&nbsp;".raw() : torrent.description}</span>
+        <span>${!torrent.description ? "&nbsp;".raw() : utils.MarkdownUtils.get().process(torrent.description).raw()}</span>
     </div>
     <div class="control-group">
         <label class="control-label">Uploader :</label>

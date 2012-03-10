@@ -40,6 +40,7 @@
         <div class="controls">
             <textarea rows="6" cols="" name="torrent.description">${flash.get('torrent.description') != null ? flash.get('torrent.description') : torrent?.description}</textarea>
         #{ifError 'torrent.description'}<span class="error-inline">#{error 'torrent.description' /}</span>#{/ifError}
+        #{else }<span class="help-inline">Syntaxe <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> accept&eacute;e</span>#{/else}
         </div>
     </div>
 
