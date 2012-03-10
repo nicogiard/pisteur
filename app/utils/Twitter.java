@@ -9,8 +9,8 @@ import java.net.URLEncoder;
 public class Twitter {
 
     private String username = "pisteurNAS";
-    private String token = "520216648-fTEy2CSiboeezJ9aNmkp6ki4wJpQNmloUdzeCJsf";
-    private String secret = "TTgIa1EDeaeehiYwDJrtR62qZlvyG5DA9luBzScr4Ic";
+    private String token = "520216648-Ddb7eVejDNSYaUKRCZpz1yVGUM5wUWdnGgAjJMsG";
+    private String secret = "hJvAI7ZCEqySqmT1U7OdIFaEGIk9Ks5sEe3FgNhHA";
 
     public static Twitter instance;
 
@@ -35,6 +35,7 @@ public class Twitter {
     public String setStatus(String status) throws Exception {
         String url = "http://twitter.com/statuses/update.json?status=" + URLEncoder.encode(status, "utf-8");
         String response = WS.url(url).oauth(TWITTER, token, secret).post().getString();
+        Logger.debug("Twitter|setStatus : response = %s", response);
         return response;
     }
 }
