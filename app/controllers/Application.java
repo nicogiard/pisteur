@@ -13,6 +13,7 @@ import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
+import utils.Twitter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -111,6 +112,13 @@ public class Application extends Controller {
         }
         torrent.tags = extractTags(tags);
         torrent.save();
+
+        try {
+            Twitter.init().setStatus("New : " + torrent.filename);
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
+        }
+
         index();
     }
 
