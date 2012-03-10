@@ -50,19 +50,19 @@ public class Application extends Controller {
     }
 
     public static void tag(String tagName) {
-        Tag activeTag = Tag.findByName(tagName);
-        notFoundIfNull(activeTag);
-        TORRENTS_PAGER.setElementCount(Torrent.countTaggedWith(activeTag));
-        List<Torrent> torrents = Torrent.findTaggedWith(activeTag, TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
+        String activeTag = tagName;
+        List<Torrent> torrents = null;
+        if ("noTag".equals(activeTag)) {
+            TORRENTS_PAGER.setElementCount(Torrent.countNotTagged());
+            torrents = Torrent.findNotTagged(TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
+        } else {
+            Tag tag = Tag.findByName(activeTag);
+            notFoundIfNull(tag);
+            TORRENTS_PAGER.setElementCount(Torrent.countTaggedWith(tag));
+            torrents = Torrent.findTaggedWith(tag, TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
+        }
         Pager pager = TORRENTS_PAGER;
         renderTemplate("Application/index.html", pager, torrents, activeTag);
-    }
-
-    public static void noTag() {
-        TORRENTS_PAGER.setElementCount(Torrent.countNotTagged());
-        List<Torrent> torrents = Torrent.findNotTagged(TORRENTS_PAGER.getPage(), TORRENTS_PAGER.getPageSize());
-        Pager pager = TORRENTS_PAGER;
-        renderTemplate("Application/index.html", torrents, pager);
     }
 
     public static void search(String keywords) {
