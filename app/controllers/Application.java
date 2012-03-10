@@ -140,6 +140,12 @@ public class Application extends Controller {
         }
         torrent.save();
 
+        try {
+            Twitter.init().setStatus("New : " + torrent.filename + " - http://bit.ly/xWYR4A");
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
+        }
+
         return "{\"jsonrpc\" : \"2.0\", \"result\" : null, \"id\" : \"id\"}";
     }
 
