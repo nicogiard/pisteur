@@ -15,6 +15,7 @@
 #{alerts /}
 
 <form action="@{Application.save()}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+    <input type="hidden" name="keywords" value="${keywords}">
     <input type="hidden" name="torrent.id" value="${torrent?.id}">
 
 #{if torrent?.id == null}
@@ -52,6 +53,6 @@
 
     <div class="form-actions">
         <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i>&nbsp;Enregistrer</button>
-        <a href="@{Application.index}" class="btn"><i class="icon-ban-circle"></i>&nbsp;Annuler</a>
+        <a href="#{if keywords}@{Application.search(keywords)}#{/if}@{Application.index}" class="btn"><i class="icon-ban-circle"></i>&nbsp;Annuler</a>
     </div>
 </form>

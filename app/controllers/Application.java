@@ -75,13 +75,13 @@ public class Application extends Controller {
         renderTemplate("Application/update.html");
     }
 
-    public static void update(Long torrentId) {
+    public static void update(Long torrentId, String keywords) {
         Torrent torrent = Torrent.findById(torrentId);
         notFoundIfNull(torrent);
-        render(torrent);
+        render(torrent, keywords);
     }
 
-    public static void save(@Required @Valid Torrent torrent, File file, String tags) {
+    public static void save(@Required @Valid Torrent torrent, File file, String tags, String keywords) {
         if (torrent.id == null) {
             validation.required(file);
         }
@@ -96,7 +96,7 @@ public class Application extends Controller {
             if (torrent.id == null) {
                 create();
             }
-            update(torrent.id);
+            update(torrent.id, keywords);
         }
 
         if (torrent.id == null) {
@@ -119,7 +119,11 @@ public class Application extends Controller {
             Logger.error(e.getMessage(), e);
         }
 
-        index();
+        if (!StringUtils.isBlank(keywords)) {
+            search(keywords);
+        } else {
+            index();
+        }
     }
 
     public static String uploadMultiple(File file) {

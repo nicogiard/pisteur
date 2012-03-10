@@ -69,7 +69,7 @@ $(document).ready(function() {
                 ${torrent.creationDate?.format("dd/MM/yyyy")}
             </td>
             <td class="actions">
-                <a href="@{Application.update(torrent.id)}" class="btn" title="Modifier"><i class="icon-pencil"></i>Modifier</a>
+                <a href="@{Application.update(torrent.id)}#{if keywords}?keywords=${keywords}#{/if}" class="btn" title="Modifier"><i class="icon-pencil"></i>Modifier</a>
                 #{if controllers.Security.connectedUser() == torrent.uploader || controllers.Security.connectedUser().isAdmin}
                 <a href="@{Application.delete(torrent.id)}" class="btn btn-danger" onclick="if(!confirm('Etes vous sûr de vouloir supprimer ce torrent ?'))return false;" title="Supprimer"><i class="icon-trash icon-white"></i>Supprimer</a>
                 #{/if}
