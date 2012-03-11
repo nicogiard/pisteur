@@ -1,6 +1,7 @@
 package utils;
 
 import play.Logger;
+import play.Play;
 import play.libs.OAuth;
 import play.libs.WS;
 
@@ -33,9 +34,13 @@ public class Twitter {
     }
 
     public String setStatus(String status) throws Exception {
-        String url = "http://twitter.com/statuses/update.json?status=" + URLEncoder.encode(status, "utf-8");
-        String response = WS.url(url).oauth(TWITTER, token, secret).post().getString();
-        Logger.debug("Twitter|setStatus : response = %s", response);
-        return response;
+        Boolean twitterActive = Boolean.parseBoolean(Play.configuration.getProperty("application.twitter.active", "false"));
+        if (twitterActive) {
+            String url = "http://twitter.com/statuses/update.json?status=" + URLEncoder.encode(status, "utf-8");
+            String response = WS.url(url).oauth(TWITTER, token, secret).post().getString();
+            Logger.debug("Twitter|setStatus : response = %s", response);
+            return response;
+        }
+        return "";
     }
 }
