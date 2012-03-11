@@ -24,6 +24,7 @@ import utils.Utils;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.io.*;
 import java.sql.Blob;
@@ -61,6 +62,9 @@ public class Torrent extends Model {
     public String info_hash;
     
     public String totalSize;
+    
+    @OneToMany
+    public List<AttachedFile> attachedFiles;
 
     public File getFile() {
         if (file != null) {
@@ -93,7 +97,7 @@ public class Torrent extends Model {
     public void setFile(File file) throws FileNotFoundException {
     	try {
     		this.file = getBlob(file);
-			this.getInfoFromTorrentFile(file);
+			this.setInfoFromTorrentFile(file);
 		} catch (TorrentParserException e) {
 			e.printStackTrace();
 		}
@@ -155,11 +159,34 @@ public class Torrent extends Model {
         return count;
     }
     
-    private void getInfoFromTorrentFile(File torrentFile) throws TorrentParserException{
+    private void setInfoFromTorrentFile(File torrentFile) throws TorrentParserException{
     	TorrentParser parser = new TorrentParser(torrentFile);
     	parser.parse();
-    	this.totalSize = Utils.byteMultipleSize(parser.getTotal_length());
+    	this.totalSize = Utils.byteSizeToStringSize(parser.getTotal_length());
     	this.info_hash = parser.getInfosHash().toLowerCase();
+    	List<String> attachedFilesName = parser.getName();
+    	List<Integer> attachedFilesSize = parser.getLength();    	
+    	if(attachedFilesName != null && attachedFilesName != null && attachedFilesName.size() == attachedFilesSize.size()){
+    		this.attachedFiles = new ArrayList<AttachedFile>();
+    		for (int i = 0; i < attachedFilesName.size(); i++) {
+    			AttachedFile attachedFile = new AttachedFile();
+    			attachedFile.name = attachedFilesName.get(i);
+    			attachedFile.size = Utils.byteSizeToStringSize(attachedFilesSize.get(i));
+    			attachedFile.save();
+    			attachedFiles.add(attachedFile);
+			}
+    	}
+    }
+    
+    public static void setInfoForAllTorrents(){
+    	List<Torrent> torrents = Torrent.all().fetch();
+    	for (Torrent torrent : torrents) {
+    		try {
+				torrent.setInfoFromTorrentFile(torrent.getFile());
+			} catch (TorrentParserException e) {
+				e.printStackTrace();
+			}			
+		}
     }
     
 }

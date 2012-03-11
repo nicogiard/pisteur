@@ -214,4 +214,9 @@ public class Application extends Controller {
         }
         return listTags;
     }
+    
+    @Check("isAdmin")
+    public static void setInfoForAllTorrents(){
+    	Torrent.setInfoForAllTorrents();
+    }
 }

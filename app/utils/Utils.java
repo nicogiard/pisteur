@@ -135,7 +135,7 @@ public class Utils {
         return rslt;
     }
     
-    public static String byteMultipleSize(long size){
+    public static String byteSizeToStringSize(long size){
     	long taille;
     	long reste;
     	String decime;
