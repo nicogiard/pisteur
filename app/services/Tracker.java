@@ -10,6 +10,7 @@ import play.db.jpa.JPA;
 import play.mvc.Http;
 import utils.Constants;
 import utils.IPUtils;
+import utils.Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -88,14 +89,9 @@ public class Tracker {
         if (!announceParams.containsKey("info_hash")) {
             throw new AnnounceException("info_hash is not found");
         } else {
-            /*
-            try {
-                String hash = Utils.byteArrayToByteString(announceParams.get("info_hash").getBytes(Constants.BYTE_ENCODING));
-                announceParams.put("info_hash", hash);
-            } catch (UnsupportedEncodingException e) {
-                throw new AnnounceException("info_hash is incorrect");
-            }
-            */
+            String hash = new String(announceParams.get("info_hash").getBytes(Constants.DEFAULT_CHARSET));
+			announceParams.put("info_hash", hash);
+			Logger.debug("hash : %s", hash);
             if (announceParams.get("info_hash").length() != 20) {
                 throw new AnnounceException("info_hash is incorrect");
             }

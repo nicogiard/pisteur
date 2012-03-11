@@ -165,7 +165,7 @@ public class Torrent extends Model {
     	this.totalSize = Utils.byteSizeToStringSize(parser.getTotal_length());
     	this.info_hash = parser.getInfosHash().toLowerCase();
     	List<String> attachedFilesName = parser.getName();
-    	List<Integer> attachedFilesSize = parser.getLength();    	
+    	List<Long> attachedFilesSize = parser.getLength();    	
     	if(attachedFilesName != null && attachedFilesName != null && attachedFilesName.size() == attachedFilesSize.size()){
     		this.attachedFiles = new ArrayList<AttachedFile>();
     		for (int i = 0; i < attachedFilesName.size(); i++) {

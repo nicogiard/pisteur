@@ -47,8 +47,8 @@ public final class TorrentParser {
 	/* In case of multiple files torrent, saveAs is the name of a directory
      * and name contains the path of the file to be saved in this directory
      */
-    private ArrayList name = new ArrayList();
-    private ArrayList length = new ArrayList();
+    private List<String> name = new ArrayList<String>();
+    private List<Long> length = new ArrayList<Long>();
 
     private long total_length;
 	
@@ -108,7 +108,7 @@ public final class TorrentParser {
 		this.pieceLength = pieceLength;
 	}
 
-	public ArrayList getName() {
+	public List<String> getName() {
 		return name;
 	}
 
@@ -116,7 +116,7 @@ public final class TorrentParser {
 		this.name = name;
 	}
 
-	public ArrayList getLength() {
+	public List<Long> getLength() {
 		return length;
 	}
 
@@ -158,49 +158,38 @@ public final class TorrentParser {
 			Map metaInfo = (HashMap<String, Object>)this.bdecode();
 			
 			if(metaInfo.containsKey("announce")){
-	            this.announceURL = new String((byte[]) metaInfo.get("announce"));
+	            this.announceURL = (String)metaInfo.get("announce");
 			}
 	        if(metaInfo.containsKey("comment")){
-	            this.comment = new String((byte[]) metaInfo.get("comment"));
+	            this.comment = (String)metaInfo.get("comment");
 	        }
 	        if(metaInfo.containsKey("created by")){
-	            this.createdBy = new String((byte[]) metaInfo.get("created by"));
+	            this.createdBy = (String)metaInfo.get("created by");
 	        }
 	        if(metaInfo.containsKey("creation date")){
 	            this.creationDate = (Long)metaInfo.get("creation date");
 	        }
 	        if(metaInfo.containsKey("encoding")){
-	            this.encoding = new String((byte[]) metaInfo.get("encoding"));
+	            this.encoding = (String)metaInfo.get("encoding");
 	        }
 
 	        //Store the info field data
 	        if(metaInfo.containsKey("info")){
 	            Map info = (Map) metaInfo.get("info");	            	
 	            //TODO hash du dictionnaire info
-	            this.infosHash = Utils.byteArrayToByteString(Utils.hash(BEncode.encode(info).getBytes()));
+	            this.infosHash = Utils.byteArrayToURLString(Utils.hash(BEncode.encode(Utils.getJSON(info)).getBytes(Constants.DEFAULT_CHARSET)));
 	            if (info.containsKey("name")){
-	                this.saveAs = new String((byte[]) info.get("name"));
-	            }
-	            if (info.containsKey("piece length")){
-	                this.pieceLength = ((Long) info.get("piece length")).intValue();
-	            }
-
-	            if (info.containsKey("pieces")) {
-	                byte[] piecesHash2 = (byte[]) info.get("pieces");
-
-	                for (int i = 0; i < piecesHash2.length / 20; i++) {
-	                    //TODO faire le hash
-	                }
+	                this.saveAs = (String)info.get("name");
 	            }
 
 	            if (info.containsKey("files")) {
 	                List multFiles = (List) info.get("files");
 	                this.total_length = 0;
 	                for (int i = 0; i < multFiles.size(); i++) {
-	                    this.length.add(((Long) ((Map) multFiles.get(i)).
-	                                             get("length")).intValue());
-	                    this.total_length += ((Long) ((Map) multFiles.get(i)).
-	                                                  get("length")).intValue();
+	                    this.length.add((Long) ((Map) multFiles.get(i)).
+	                                             get("length"));
+	                    this.total_length += (Long) ((Map) multFiles.get(i)).
+	                                                  get("length");
 
 	                    List path = (List) ((Map) multFiles.get(i)).get(
 	                            "path");
@@ -213,7 +202,7 @@ public final class TorrentParser {
 	            } else {
 	                this.length.add((Long) info.get("length"));
 	                this.total_length = (Long) info.get("length");
-	                this.name.add(new String((byte[]) info.get("name")));
+	                this.name.add((String)info.get("name"));
 	            }
 	        }
 		}
@@ -266,7 +255,7 @@ public final class TorrentParser {
         return liste;
 	}
 	
-	private byte[] decodeString() throws TorrentParserException{
+	private String decodeString() throws TorrentParserException{
 		 StringBuilder sb = new StringBuilder();
 		try{
 			int colonPosition = position;
@@ -290,7 +279,7 @@ public final class TorrentParser {
 	        	for(int i=colonPosition + 1; i < colonPosition + 1 + length; i++){
 	            	tempArray[tempArrayIndex++] = torrentBytes[i];
 	            }
-	        	return tempArray;
+	        	return new String(tempArray, Constants.DEFAULT_CHARSET);
 	        }
 		}
         catch (NumberFormatException e) {
@@ -320,7 +309,7 @@ public final class TorrentParser {
 	
 	public static void main(String args[]){
 		try {
-			TorrentParser parser = new TorrentParser(new File("./test/saison_1.torrent"));
+			TorrentParser parser = new TorrentParser(new File("./test/2012 Francais.avi.avi.torrent"));
 			parser.parse();
 			System.out.println("announce url : " + parser.announceURL);
 			System.out.println("comment : " + parser.comment);

@@ -37,7 +37,15 @@
 
 package utils;
 
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * A set of utility methods used by several classes
@@ -201,4 +209,12 @@ public class Utils {
         }
         return null;
     }
+    
+    public static JsonObject getJSON(Map map) {
+    	Gson gson = new Gson();
+    	String jsonString = gson.toJson(map);
+    	JsonParser parser= new JsonParser();
+    	JsonElement jsonElement = parser.parse(jsonString);
+    	return jsonElement.getAsJsonObject();
+	}
 }
