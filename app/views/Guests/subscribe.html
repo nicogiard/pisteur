@@ -31,22 +31,6 @@ $(document).ready(function() {
         #{else }<span class="help-inline">&{'validation.required'}</span>#{/else}
         </div>
     </div>
-    <div class="control-group #{ifError 'user.firstName'}error#{/ifError}">
-        <label class="control-label">Pr&eacute;nom</label>
-        <div class="controls">
-            <input type="text" name="user.firstName" value="${flash.get('user.firstName') != null ? flash.get('user.firstName') : user?.firstName}">
-            #{ifError 'user.firstName'}<span class="help-inline">#{error 'user.firstName' /}</span>#{/ifError}
-            #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
-        </div>
-    </div>
-    <div class="control-group #{ifError 'user.lastName'}error#{/ifError}">
-        <label class="control-label">Nom</label>
-        <div class="controls">
-            <input type="text" autocomplete="off" name="user.lastName" value="${flash.get('user.lastName') != null ? flash.get('user.lastName') : user?.lastName}">
-            #{ifError 'user.lastName'}<span class="help-inline">#{error 'user.lastName' /}</span>#{/ifError}
-            #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
-        </div>
-    </div>
     <div class="control-group #{ifError 'user.email'}error#{/ifError}">
         <label class="control-label">Email</label>
         <div class="controls">

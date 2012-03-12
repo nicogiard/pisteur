@@ -23,12 +23,6 @@ public class User extends Model {
     public String email;
 
     @Required
-    public String firstName;
-
-    @Required
-    public String lastName;
-
-    @Required
     public String ipAddress;
 
     public String clientName;
@@ -44,11 +38,11 @@ public class User extends Model {
     }
 
     public static Long countByLetter(String letter) {
-        return User.count("lastName LIKE ?", letter + "%");
+        return User.count("username LIKE ?", letter + "%");
     }
 
     public static JPAQuery byLetter(String letter) {
-        return User.find("lastName LIKE ? ORDER BY lastName, firstName", letter + "%");
+        return User.find("username LIKE ? ORDER BY username", letter + "%");
     }
     
     public static List<User> findUnactiveUsers(){

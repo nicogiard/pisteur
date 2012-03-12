@@ -80,8 +80,6 @@ public class Users extends Controller {
             }
             update(user.id);
         }
-        user.firstName = user.firstName.substring(0, 1).toUpperCase() + user.firstName.substring(1).toLowerCase();
-        user.lastName = user.lastName.toUpperCase();
 
         user.save();
         flash.success("L'utilisateur a correctement été enregistré");

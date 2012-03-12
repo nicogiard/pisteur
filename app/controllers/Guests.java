@@ -20,9 +20,6 @@ public class Guests extends Controller {
             validation.keep();
             subscribe();
         }
-        
-        user.firstName = user.firstName.substring(0, 1).toUpperCase() + user.firstName.substring(1).toLowerCase();
-        user.lastName = user.lastName.toUpperCase();
 
         user.save();
         flash.success("Votre inscription a réussi, un administrateur doit au préalable valider votre compte pour le rendre actif.");
