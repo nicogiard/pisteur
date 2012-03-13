@@ -117,7 +117,7 @@ public class Torrent extends Model {
     public static List<Torrent> findTaggedWith(Tag tag, int page, int length) {
         return Torrent.find("SELECT t FROM Torrent t JOIN t.tags AS tag WHERE tag.name=? ORDER BY creationDate DESC", tag.name).fetch(page, length);
     }
-
+        
     public static long countTaggedWith(Tag tag) {
         return Torrent.count("FROM Torrent t JOIN t.tags AS tag WHERE tag.name=?", tag.name);
     }

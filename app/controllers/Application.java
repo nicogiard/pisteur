@@ -2,6 +2,7 @@ package controllers;
 
 import com.google.common.collect.Lists;
 import controllers.utils.Pager;
+import models.AttachedFile;
 import models.Tag;
 import models.Torrent;
 import org.apache.commons.lang.StringUtils;
@@ -184,6 +185,13 @@ public class Application extends Controller {
         Torrent torrent = Torrent.findById(torrentId);
         notFoundIfNull(torrent);
         render(torrent);
+    }
+    
+    public static void attachedFiles(Long torrentId) {
+        Torrent torrent = Torrent.findById(torrentId);
+        notFoundIfNull(torrent);
+        List<AttachedFile> attachedFiles= torrent.attachedFiles;
+        render(attachedFiles);
     }
 
     public static void getTorrentFile(Long torrentId) {

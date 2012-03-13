@@ -195,7 +195,7 @@ public final class TorrentParser {
 	                            "path");
 	                    String filePath = "";
 	                    for (int j = 0; j < path.size(); j++) {
-	                        filePath += new String((byte[]) path.get(j));
+	                        filePath += path.get(j);
 	                    }
 	                    this.name.add(filePath);
 	                }

@@ -15,6 +15,16 @@ $(document).ready(function() {
             }
         )
     });
+
+    $('.btn-attachedFiles').live("click", function(e) {
+        var detailsAction = #{jsAction @Application.attachedFiles(':id') /}
+        $('#attachedFilesModal').load(
+            detailsAction({id: $(this).attr("data-id")}),
+            function() {
+                $('#attachedFilesModal').modal('show');
+            }
+        )
+    });
 });
 </script>
 #{/set}
@@ -54,7 +64,7 @@ $(document).ready(function() {
     #{list torrents, as:'torrent'}
         <tr>
             <td>
-                <a href="#!" class="btn-detail" data-id="${torrent.id}">${torrent.filename}</a>
+                <a href="#!" class="btn-detail" data-id="${torrent.id}">${torrent.filename}</a> <a href="#!" class="btn-attachedFiles" data-id="${torrent.id}"><i class="icon-list-alt" title="liste des fichiers"></i></a>
                 <a href="@{Application.getTorrentFile(torrent.id)}" class="pull-right" title="T&eacute;l&eacute;charger le torrent ${torrent.filename}"><i class="icon-download"></i>T&eacute;l&eacute;charger</a>
             </td>
             <td><a href="@{Users.details(torrent.uploader?.id)}">${torrent.uploader?.username}</a></td>
@@ -94,5 +104,6 @@ $(document).ready(function() {
 </div>
 
 <div class="modal" id="detailsModal"></div>
+<div class="modal" id="attachedFilesModal"></div>
 
 #{uploadManager uploadUrl:@Application.uploadMultiple(), returnUrl:@Application.index() /}
