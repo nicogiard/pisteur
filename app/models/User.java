@@ -22,8 +22,6 @@ public class User extends Model {
 
     public String ipAddress;
 
-    public String dyndns;
-
     public String clientName;
 
     public boolean isAdmin = false;
