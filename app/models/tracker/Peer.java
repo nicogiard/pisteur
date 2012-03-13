@@ -1,7 +1,6 @@
 package models.tracker;
 
 import play.db.jpa.Model;
-import play.mvc.Http;
 
 import javax.persistence.Entity;
 import java.util.Date;
@@ -14,13 +13,13 @@ public class Peer extends Model {
     public String compact;
     public String ip;
     public int port;
+    public Long downloaded;
+    public Long uploaded;
+    public Long byteLeft;
     public int state;
     public Date updated;
 
-    public Peer(Map<String, String> announceParams) {
-        this.info_hash = announceParams.get("info_hash");
-        this.peer_id = announceParams.get("peer_id");
-        this.port = Integer.parseInt(announceParams.get("port"));
+    public Peer() {
     }
     
     public static long countSeeder(String info_hash){

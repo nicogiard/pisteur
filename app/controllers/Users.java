@@ -80,8 +80,6 @@ public class Users extends Controller {
             }
             update(user.id);
         }
-        user.firstName = user.firstName.substring(0, 1).toUpperCase() + user.firstName.substring(1).toLowerCase();
-        user.lastName = user.lastName.toUpperCase();
 
         user.save();
         flash.success("L'utilisateur a correctement été enregistré");
@@ -101,7 +99,8 @@ public class Users extends Controller {
     public static void delete(Long userId) {
         User user = User.findById(userId);
         notFoundIfNull(user);
-        int result = JPA.em().createNativeQuery("DELETE FROM Torrent_Tag WHERE torrent_id IN (SELECT tota.torrent_id FROM Torrent_Tag tota INNER JOIN Torrent t ON tota.torrent_id = t.id WHERE t.uploader_id=?)").setParameter(1, user.id).executeUpdate();
+
+        int result = JPA.em().createNativeQuery("DELETE FROM Torrent_Tag tt WHERE tt.torrent_id IN (SELECT tota.torrent_id FROM Torrent_Tag tota INNER JOIN Torrent t ON tota.torrent_id = t.id WHERE t.uploader_id=?)").setParameter(1, user.id).executeUpdate();
         Torrent.delete("uploader=?", user);
         user.delete();
         flash.success("L'utilisateur a correctement été supprimé");
