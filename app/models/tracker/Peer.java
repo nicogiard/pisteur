@@ -15,7 +15,7 @@ public class Peer extends Model {
     public int port;
     public Long downloaded;
     public Long uploaded;
-    public Long left;
+    public Long byteLeft;
     public int state;
     public Date updated;
 
