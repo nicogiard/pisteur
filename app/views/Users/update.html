@@ -46,7 +46,7 @@
             <input type="text" id="user_ipAddress" name="user.ipAddress" value="${flash.get('user.ipAddress') != null ? flash.get('user.ipAddress') : user?.ipAddress}">
         #{ifError 'user.ipAddress'}<span class="help-inline">#{error 'user.ipAddress' /}</span>#{/ifError}
         #{else}<span class="help-inline">&{'validation.required'}</span>#{/else}
-        <br />Votre adress ip actuelle : <a href="#!" id="myIpAddress" title="Cliquer pour utiliser cette adresse ip" data-ipadress="${ipAddress}">${ipAddress}</a>
+        <br />Votre adresse ip actuelle : <a href="#!" id="myIpAddress" title="Cliquer pour utiliser cette adresse ip" data-ipadress="${ipAddress}">${ipAddress}</a> (<em>Vous pouvez aussi utiliser un dyndns : "mondomain.no-ip.org" par exemple</em>)
         </div>
     </div>
     <div class="control-group #{ifError 'user.clientName'}error#{/ifError}">
