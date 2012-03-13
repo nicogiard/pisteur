@@ -12,7 +12,6 @@ import utils.Constants;
 import utils.IPUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -207,9 +206,7 @@ public class Tracker {
                 seedings = 1;
             }
             if (peer == null) {
-                // Gestion du cas ou l'utilisateur a saisi un hostname DNS ou une IP dans son profil
-                InetAddress address = InetAddress.getByName(announceParams.get("ip"));
-                if (User.isActive(address.getHostAddress()) || User.isActive(address.getHostName())) {
+                if (User.isValidIPAddress(announceParams.get("ip"))) {
                     new_peer();
                 } else {
                     Logger.debug("Tracker|event : utilisateur(ip: %s) non autorisé", announceParams.get("ip"));
