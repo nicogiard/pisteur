@@ -1,6 +1,39 @@
 #{extends 'template.html' /}
 #{set title: (user?.id != null) ? ("Modification du torrent " + torrent.filename) :  "Nouveau Torrent"/}
 
+#{set 'moreStyles'}
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.tagsinput.css'}" />
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.autocomplete.css'}" />
+    <style type="text/css">
+        div.tagsinput input {
+            border: 0;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+        div.tagsinput input { width:90px;}
+        div.tagsinput span.tag { padding: 3px 5px;}
+        .ac_over {
+        }
+    </style>
+#{/set}
+
+#{set 'moreScripts'}
+    <script type='text/javascript' src="@{'/public/javascripts/jquery.tagsinput.js'}"></script>
+    <script type='text/javascript' src="@{'/public/javascripts/jquery.autocomplete.min.js'}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('#tags').tagsInput({
+                'height':'70px',
+                'width':'279px',
+                'interactive':true,
+                'defaultText':'ajoutez un tag',
+                'autocomplete_url':'@{Application.tags()}',
+                'autocomplete':{selectFirst:true, width:'100px', autoFill:false}
+            });
+        });
+    </script>
+#{/set}
 
 <h1 class="screen-title"><i class="big-icon-page"></i>&nbsp;Torrents</h1>
 <h2 class="screen-title">
@@ -48,7 +81,7 @@
     <div class="control-group #{ifError 'tags'}error#{/ifError}">
         <label class="control-label">Tags</label>
         <div class="controls">
-            <input type="text" autocomplete="off" name="tags" value="${flash.get('tags') != null ? flash.get('tags') : (torrent?.id != null) ? torrent?.tags.name.join(', ') : null}">
+            <input type="text" autocomplete="off" name="tags" id="tags" value="${flash.get('tags') != null ? flash.get('tags') : (torrent?.id != null) ? torrent?.tags.name.join(', ') : null}">
         #{ifError 'tags'}<span class="error-inline">#{error 'tags' /}</span>#{/ifError}
         </div>
     </div>

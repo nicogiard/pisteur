@@ -1,5 +1,9 @@
 #{extends 'main.html' /}
 
+#{set 'moreStyles'}
+    #{get 'moreStyles'/}
+#{/set}
+
 #{set 'moreScripts'}
     <script src="@{'/public/javascripts/bootstrap.js'}" type="text/javascript" charset="utf-8"></script>
     #{get 'moreScripts'/}

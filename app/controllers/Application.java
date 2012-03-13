@@ -83,6 +83,17 @@ public class Application extends Controller {
         render(torrent, keywords, activeTag);
     }
 
+    public static void tags() {
+        List<Tag> tags = Tag.findAll();
+
+        StringBuilder sb = new StringBuilder();
+        for (Tag tag : tags) {
+            sb.append(tag.name).append('\n');
+        }
+
+        renderText(sb.toString());
+    }
+
     public static void save(@Required @Valid Torrent torrent, File file, String tags, String keywords, String activeTag) {
         if (torrent.id == null) {
             validation.required(file);
