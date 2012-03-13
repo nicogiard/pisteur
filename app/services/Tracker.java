@@ -281,13 +281,6 @@ public class Tracker {
         peer.updated = new Date();
         peer.save();
         Logger.debug("Tracker|new_peer : sauvegarde d'un nouveau peer [%s]", peer.id);
-
-//        String sql = "INSERT INTO `Peer` (info_hash, peer_id, ip, port, state, downloaded, uploaded, byteLeft, updated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-//        int result = JPA.em().createNativeQuery(sql).setParameter(1, announceParams.get("info_hash")).setParameter(2, announceParams.get("peer_id")).
-//                setParameter(3, announceParams.get("ip")).setParameter(4, announceParams.get("port")).
-//                setParameter(5, seedings).setParameter(6, Long.valueOf(announceParams.get("downloaded"))).setParameter(7, Long.valueOf(announceParams.get("uploaded"))).
-//                setParameter(8, Long.valueOf(announceParams.get("left"))).setParameter(9, new Date()).executeUpdate();
-//        Logger.debug("new_peer : result=%s", result);
     }
 
     private void update_peer() {
@@ -306,9 +299,6 @@ public class Tracker {
         } else {
             Logger.error("Tracker|update_peer : peer not found : info_hash[%s] peer_id[%s]", announceParams.get("info_hash"), announceParams.get("peer_id"));
         }
-//        String sql = "UPDATE `Peer` SET ip=?, port=?, state=?, downloaded=?, uploaded=?, byteLeft=?, updated=? WHERE info_hash=? AND peer_id=?";
-//        int result = JPA.em().createNativeQuery(sql).setParameter(1, announceParams.get("ip")).setParameter(2, announceParams.get("port")).setParameter(3, seedings).setParameter(4, Long.valueOf(announceParams.get("downloaded"))).setParameter(5, Long.valueOf(announceParams.get("uploaded"))).setParameter(6, Long.valueOf(announceParams.get("left"))).setParameter(7, new Date()).setParameter(8, announceParams.get("info_hash")).setParameter(9, announceParams.get("peer_id")).executeUpdate();
-//        Logger.debug("update_peer : result=%s", result);
     }
 
     private void update_last_access() {
@@ -321,8 +311,5 @@ public class Tracker {
         } else {
             Logger.error("Tracker|update_last_access : peer not found : info_hash[%s] peer_id[%s]", announceParams.get("info_hash"), announceParams.get("peer_id"));
         }
-//        String sql = "UPDATE `Peer` SET updated=? WHERE info_hash=? AND peer_id=?";
-//        int result = JPA.em().createNativeQuery(sql).setParameter(1, new Date()).setParameter(2, announceParams.get("info_hash")).setParameter(3, announceParams.get("peer_id")).executeUpdate();
-//        Logger.debug("update_last_access : result=%s", result);
     }
 }
