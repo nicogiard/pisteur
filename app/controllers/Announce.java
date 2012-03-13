@@ -19,7 +19,7 @@ public class Announce extends Controller {
         try {
             Tracker tracker = new Tracker(request);
 
-            tracker.validateParameters();
+            tracker.validateAnnounceParameters();
 
             reponse = tracker.peers();
 

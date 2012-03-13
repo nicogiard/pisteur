@@ -28,6 +28,7 @@ GET     /user/{userId}/delete                   Users.delete
 
 # Tracker
 GET     /announce                               Announce.index
+GET     /scrape                                 Scrape.index
 
 # Feeds
 GET     /feeds/rss                              Feeds.rss

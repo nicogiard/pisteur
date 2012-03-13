@@ -36,14 +36,11 @@ public class Tracker {
     public int random_limit = 500;
     public int clean_idle_peers = 10;
 
+    private int numwant = 0;
     private int seedings = 0;
 
     public Tracker(Http.Request request) throws UnsupportedEncodingException {
         announceParams = getParams(request);
-
-        if (announceParams.containsKey("left") && Long.valueOf(announceParams.get("left")) == 0) {
-            seedings = 1;
-        }
     }
 
     public static String error(String message) {
@@ -74,6 +71,7 @@ public class Tracker {
             }
         }
 
+        // prendre quoi qu'il arrive l'ip de la request
         String ipAddress = IPUtils.getIpFromRequest(request);
         Logger.debug("Tracker|getParams : ip : %s", ipAddress);
         announceParams.put("ip", ipAddress);
@@ -81,21 +79,13 @@ public class Tracker {
         return announceParams;
     }
 
-    public void validateParameters() throws AnnounceException {
-        Logger.debug("Tracker|validateParameters : start verificating parameters...");
+    public void validateAnnounceParameters() throws AnnounceException {
+        Logger.debug("Tracker|validateAnnounceParameters : start verificating announce parameters...");
 
         // Si info_hash n'existe pas et si length() != 20
         if (!announceParams.containsKey("info_hash")) {
             throw new AnnounceException("info_hash is not found");
         } else {
-            /*
-            try {
-                String hash = Utils.byteArrayToByteString(announceParams.get("info_hash").getBytes(Constants.BYTE_ENCODING));
-                announceParams.put("info_hash", hash);
-            } catch (UnsupportedEncodingException e) {
-                throw new AnnounceException("info_hash is incorrect");
-            }
-            */
             if (announceParams.get("info_hash").length() != 20) {
                 throw new AnnounceException("info_hash is incorrect");
             }
@@ -104,14 +94,6 @@ public class Tracker {
         if (!announceParams.containsKey("peer_id")) {
             throw new AnnounceException("peer_id is not found");
         } else {
-            /*
-            try {
-                String peerid = Utils.byteArrayToByteString(announceParams.get("peer_id").getBytes(Constants.BYTE_ENCODING));
-                announceParams.put("peer_id", peerid);
-            } catch (UnsupportedEncodingException e) {
-                throw new AnnounceException("peer_id is incorrect");
-            }
-            */
             if (announceParams.get("peer_id").length() != 20) {
                 throw new AnnounceException("peer_id is incorrect");
             }
@@ -121,9 +103,21 @@ public class Tracker {
         if (!announceParams.containsKey("port") || !NumberUtils.isNumber(announceParams.get("port"))) {
             throw new AnnounceException("client listening port is invalid");
         }
+        // Si uploaded n'existe pas et si uploaded n'est pas numeric
+        if (!announceParams.containsKey("uploaded") || !NumberUtils.isNumber(announceParams.get("uploaded"))) {
+            throw new AnnounceException("client data uploaded field is invalid");
+        }
+        // Si downloaded n'existe pas et si downloaded n'est pas numeric
+        if (!announceParams.containsKey("downloaded") || !NumberUtils.isNumber(announceParams.get("downloaded"))) {
+            throw new AnnounceException("client data downloaded field is invalid");
+        }
         // Si left n'existe pas et si left n'est pas numeric
-        else if (!announceParams.containsKey("left") || !NumberUtils.isNumber(announceParams.get("left"))) {
+        if (!announceParams.containsKey("left") || !NumberUtils.isNumber(announceParams.get("left"))) {
             throw new AnnounceException("client data left field is invalid");
+        } else {
+            if (Long.valueOf(announceParams.get("left")) == 0) {
+                seedings = 1;
+            }
         }
 
         // TODO faire le reste des parameters
@@ -132,10 +126,8 @@ public class Tracker {
 
         // no_peer_id - optional
 
-        // ip - optional
-        // si non présente prendre la remote addr
-        // sinon reponse = Tracker.error("'could not locate clients ip");
-        else if (!announceParams.containsKey("ip")) {
+        // si l'ip n'existe pas
+        if (!announceParams.containsKey("ip")) {
             throw new AnnounceException("could not locate clients ip");
         }
 
@@ -143,8 +135,16 @@ public class Tracker {
         // si non présente prendre numwant = default_peers
         // sinon si numwant > max_peers alors numwant = max_peers
         // sinon prendre numwant
+        if (!announceParams.containsKey("numwant") || !NumberUtils.isNumber(announceParams.get("numwant"))) {
+            numwant = default_peers;
+        } else {
+            numwant = Integer.valueOf(announceParams.get("numwant"));
+            if (numwant > max_peers) {
+                numwant = max_peers;
+            }
+        }
 
-        Logger.debug("Tracker|validateParameters : All is good!");
+        Logger.debug("Tracker|validateAnnounceParameters : All is good!");
     }
 
     public String peers() {
@@ -158,8 +158,7 @@ public class Tracker {
         // response start
         String response = "d8:intervali" + announce_interval + "e12:min intervali" + min_interval + "e5:peers";
 
-        // TODO : prendre en compte du num_want
-        List<Peer> peers = Peer.find("info_hash=?", announceParams.get("info_hash")).fetch();
+        List<Peer> peers = Peer.find("info_hash=?", announceParams.get("info_hash")).fetch(numwant);
 
         boolean compact = false;
         if (compact) {
@@ -224,6 +223,45 @@ public class Tracker {
         }
     }
 
+    public void validateScrapeParameters() throws AnnounceException {
+        Logger.debug("Tracker|validateScrapeParameters : start verificating scrape parameters...");
+
+        Logger.debug("Tracker|validateScrapeParameters : All is good!");
+    }
+
+    public String stats() {
+        String sql = "SELECT SUM(state=1), SUM(state=0), COUNT(DISTINCT info_hash) FROM Peers";
+
+//        StringBuilder reponse = new StringBuilder();
+//        if (announceParams.containsKey("xml")) {
+//            //        header('Content-Type: text/xml');
+//            reponse.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+//            reponse.append("<tracker version=\"").append(Version.VERSION).append("\">");
+//            reponse.append("<peers>").append(number_format($stats[0] + $stats[1])).append("<peers>");
+//            reponse.append("<seeders>").append(number_format($stats[0])).append("</seeders>");
+//            reponse.append("<leechers>").append(number_format($stats[1])).append("</leechers>");
+//            reponse.append("<torrents>").append(number_format($stats[2])).append("</torrents></tracker>");
+//        } else if (announceParams.containsKey("json")) {
+//            //        header('Content-Type: text/javascript');
+//            //        echo '{"tracker":{"version":"$Id$",' .
+//            //        '"peers": "' . number_format($stats[0] + $stats[1]) . '",' .
+//            //        '"seeders":"' . number_format($stats[0]) . '",' .
+//            //        '"leechers":"' . number_format($stats[1]) . '",' .
+//            //        '"torrents":"' . number_format($stats[2]) . '"}}';
+//        } else {
+//            //        echo '<!doctype html><html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8">' .
+//            //        '<title>PeerTracker: $Id$</title>' .
+//            //        '<body><pre>' . number_format($stats[0] + $stats[1]) .
+//            //        ' peers (' . number_format($stats[0]) . ' seeders + ' . number_format($stats[1]) .
+//            //        ' leechers) in ' . number_format($stats[2]) . ' torrents</pre></body></html>';
+//        }
+        return "";
+    }
+
+    public String scrape() {
+        return "";
+    }
+
     private void delete_peer() {
         String sql = "DELETE FROM `Peer` WHERE info_hash=? AND peer_id=?;";
         int result = JPA.em().createNativeQuery(sql).setParameter(1, announceParams.get("info_hash")).setParameter(2, announceParams.get("peer_id")).executeUpdate();
@@ -231,20 +269,60 @@ public class Tracker {
     }
 
     private void new_peer() {
-        String sql = "INSERT INTO `Peer` (info_hash, peer_id, ip, port, state, updated) VALUES (?, ?, ?, ?, ?, ?);";
-        int result = JPA.em().createNativeQuery(sql).setParameter(1, announceParams.get("info_hash")).setParameter(2, announceParams.get("peer_id")).setParameter(3, announceParams.get("ip")).setParameter(4, announceParams.get("port")).setParameter(5, seedings).setParameter(6, new Date()).executeUpdate();
-        Logger.debug("new_peer : result=%s", result);
+        Peer peer = new Peer();
+        peer.info_hash = announceParams.get("info_hash");
+        peer.peer_id = announceParams.get("peer_id");
+        peer.ip = announceParams.get("ip");
+        peer.port = Integer.valueOf(announceParams.get("port"));
+        peer.state = seedings;
+        peer.downloaded = Long.valueOf(announceParams.get("downloaded"));
+        peer.uploaded = Long.valueOf(announceParams.get("uploaded"));
+        peer.left = Long.valueOf(announceParams.get("left"));
+        peer.updated = new Date();
+        peer.save();
+        Logger.debug("Tracker|new_peer : sauvegarde d'un nouveau peer [%s]", peer.id);
+
+//        String sql = "INSERT INTO `Peer` (info_hash, peer_id, ip, port, state, downloaded, uploaded, left, updated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+//        int result = JPA.em().createNativeQuery(sql).setParameter(1, announceParams.get("info_hash")).setParameter(2, announceParams.get("peer_id")).
+//                setParameter(3, announceParams.get("ip")).setParameter(4, announceParams.get("port")).
+//                setParameter(5, seedings).setParameter(6, announceParams.get("downloaded")).setParameter(7, announceParams.get("uploaded")).
+//                setParameter(8, announceParams.get("left")).setParameter(9, new Date()).executeUpdate();
+//        Logger.debug("new_peer : result=%s", result);
     }
 
     private void update_peer() {
-        String sql = "UPDATE `Peer` SET ip=?, port=?, state=?, updated=? WHERE info_hash=? AND peer_id=?";
-        int result = JPA.em().createNativeQuery(sql).setParameter(1, announceParams.get("ip")).setParameter(2, announceParams.get("port")).setParameter(3, seedings).setParameter(4, new Date()).setParameter(5, announceParams.get("info_hash")).setParameter(6, announceParams.get("peer_id")).executeUpdate();
-        Logger.debug("update_peer : result=%s", result);
+        Peer peer = Peer.find("info_hash=? AND peer_id=?", announceParams.get("info_hash"), announceParams.get("peer_id")).first();
+        if (peer != null) {
+            peer.ip = announceParams.get("ip");
+            peer.port = Integer.valueOf(announceParams.get("port"));
+            peer.state = seedings;
+            peer.downloaded = Long.valueOf(announceParams.get("downloaded"));
+            peer.uploaded = Long.valueOf(announceParams.get("uploaded"));
+            peer.left = Long.valueOf(announceParams.get("left"));
+            peer.updated = new Date();
+            peer.save();
+
+            Logger.debug("Tracker|update_peer : update du peer [%s]", peer.id);
+        } else {
+            Logger.error("Tracker|update_peer : peer not found : info_hash[%s] peer_id[%s]", announceParams.get("info_hash"), announceParams.get("peer_id"));
+        }
+//        String sql = "UPDATE `Peer` SET ip=?, port=?, state=?, downloaded=?, uploaded=?, left=?, updated=? WHERE info_hash=? AND peer_id=?";
+//        int result = JPA.em().createNativeQuery(sql).setParameter(1, announceParams.get("ip")).setParameter(2, announceParams.get("port")).setParameter(3, seedings).setParameter(4, announceParams.get("downloaded")).setParameter(5, announceParams.get("uploaded")).setParameter(6, announceParams.get("left")).setParameter(7, new Date()).setParameter(8, announceParams.get("info_hash")).setParameter(9, announceParams.get("peer_id")).executeUpdate();
+//        Logger.debug("update_peer : result=%s", result);
     }
 
     private void update_last_access() {
-        String sql = "UPDATE `Peer` SET updated=? WHERE info_hash=? AND peer_id=?";
-        int result = JPA.em().createNativeQuery(sql).setParameter(1, new Date()).setParameter(2, announceParams.get("info_hash")).setParameter(3, announceParams.get("peer_id")).executeUpdate();
-        Logger.debug("update_last_access : result=%s", result);
+        Peer peer = Peer.find("info_hash=? AND peer_id=?", announceParams.get("info_hash"), announceParams.get("peer_id")).first();
+        if (peer != null) {
+            peer.updated = new Date();
+            peer.save();
+
+            Logger.debug("Tracker|update_last_access : update du peer [%s]", peer.id);
+        } else {
+            Logger.error("Tracker|update_last_access : peer not found : info_hash[%s] peer_id[%s]", announceParams.get("info_hash"), announceParams.get("peer_id"));
+        }
+//        String sql = "UPDATE `Peer` SET updated=? WHERE info_hash=? AND peer_id=?";
+//        int result = JPA.em().createNativeQuery(sql).setParameter(1, new Date()).setParameter(2, announceParams.get("info_hash")).setParameter(3, announceParams.get("peer_id")).executeUpdate();
+//        Logger.debug("update_last_access : result=%s", result);
     }
 }
