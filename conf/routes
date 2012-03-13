@@ -14,6 +14,7 @@ GET     /torrent/create                         Application.create
 GET     /torrent/{torrentId}/update             Application.update
 POST    /torrent/save                           Application.save
 GET     /torrent/{torrentId}/details            Application.details
+GET     /torrent/{torrentId}/attachedFiles      Application.attachedFiles
 GET     /torrent/{torrentId}/delete             Application.delete
 GET     /torrent/{torrentId}/download           Application.getTorrentFile
 

@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Liste des fichiers associ&eacute;es &agrave; ce torrent</h3>
+</div>
+<div class="modal-body">
+        <ul class="controls">
+        	#{list attachedFiles, as:'file'}
+    		<li>${file.name} (${file.size})</li>
+			#{/list}
+		</ul>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Fermer</a>
+</div>
